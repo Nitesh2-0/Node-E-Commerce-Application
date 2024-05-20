@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+  <% if(message){ %>
+    <div class="p-1 rounded text-gray-100 bg-red-500 ml-2 absolute top-1 z-99 " id="Error">
+      <%= message %>
+    </div>
+    <% } %>
+      <div class="container mx-auto mt-8">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/register" method="post">
+          <h2 class="text-center text-2xl text-gray-800 mb-4">Register</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name-f">First
+                Name</label>
+              <input type="text" class="form-input border-2 p-1 rounded" name="fname" id="name-f"
+                placeholder="Enter your first name." required>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="email">Email</label>
+              <input type="email" class="form-input  border-2 p-1 rounded" name="email" id="email"
+                placeholder="Enter your email." required>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="address-1">Address
+                Line-1</label>
+              <input type="text" class="form-input  border-2 p-1 rounded" name="Locality" id="address-1"
+                placeholder="Locality/House/Street no." required>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="State">State</label>
+              <input type="text" class="form-input border-2 p-1 rounded" name="State" id="State"
+                placeholder="Enter your state name." required>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="zip">Postal-Code</label>
+              <input type="text" class="form-input  border-2 p-1 rounded" name="Zip" id="zip" placeholder="Postal-Code."
+                required>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="Country">Country</label>
+              <select class="form-select border-2 p-1 rounded" name="Country">
+                <option value="India">India</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="sex">Gender</label>
+              <select id="sex" name="sex" class="form-select border-2 p-1 rounded">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="unspecified">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="cod">Country
+                code</label>
+              <select class="form-select border-2 p-1 rounded" name="CountryCode">
+                <option data-countryCode="US" value="1" selected>USA (+1)</option>
+                <option data-countryCode="GB" value="44">UK (+44)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="tel">Phone</label>
+              <input type="tel" name="phone" class="form-input border-2 p-1 rounded " id="tel"
+                placeholder="Enter Your Contact Number." required>
+            </div>
+            <div class="form-group">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="pass">Password</label>
+              <input type="password" name="password" class="form-input border-2 p-1 rounded " id="pass"
+                placeholder="Enter your password." required>
+            </div>
+            <div class="form-group">
+              <input type="checkbox" class="form-checkbox" id="chb" required><label for="chb"
+                class="ml-2 text-gray-700">&nbsp;I accept all terms and conditions.</label>
+            </div>
+            <div class="form-group">
+              <button
+                class="btn btn-primary bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+            </div>
+          </div>
+        </form>
+        <div class="text-center">
+          <p class="text-gray-700">Already have an account? <a href="/" class="text-blue-500 hover:text-blue-700">Login
+              here</a>.</p>
+        </div>
+      </div>
+      <script>
+        setTimeout(() => {
+          document.getElementById('Error').style.display = "none";
+        }, 3000);
+
+      </script>
+</body>
+
+</html>
