@@ -8,7 +8,8 @@ passport.use(new localStategy(userModel.authenticate()));
 
 /* GET Login Page. */
 router.get('/', function (req, res, next) {
-  res.render('login');
+  // res.redirect('/iteam')
+  res.render('login')
 });
 
 /* POST Login Page */
@@ -34,8 +35,8 @@ router.post('/register', async function (req, res) {
     const fullName = fname;
     const userData = new userModel({ username: email, fullName, email, phone, Locality, State, Zip, sex, Country, CountryCode });
 
-    userModel.register(userData,req.body.password).then(function(registerUser){
-      passport.authenticate('local')(req,res,function(){
+    userModel.register(userData, req.body.password).then(function (registerUser) {
+      passport.authenticate('local')(req, res, function () {
         res.redirect('/');
       })
     })
@@ -55,24 +56,43 @@ router.get('/logout', function (req, res, next) {
 })
 
 /* GET Feed Page */
-router.get('/feed', auth , async (req, res) => {
+router.get('/feed', auth, async (req, res) => {
   try {
     const username = req.user.username;
     const data = await userModel.findOne({ username });
     const name = data.fullName.split(' ')[0];
     const userFeedData = {
-      location:data.State +" " + data. Zip,
-      name : name,
-      img : data.profileImg,
+      location: data.State + " " + data.Zip,
+      name: name,
+      img: data.profileImg,
     }
     if (!data) {
       return res.redirect('/register');
     }
-    res.render('feed',{userFeedData})
+    res.render('feed', { userFeedData })
   } catch (error) {
     res.redirect('/register');
   }
 });
+
+/* GET sellerProfile Page */
+router.get('/sellerProfile', async (req, res) => {
+  try {
+    const username = req.user.username;
+    const authSeller = await userModel.findOne({username})
+    const seller = {
+      profileImg:authSeller.profileImg,
+      sellerName: authSeller.fullName.split(' ')[0]
+    }
+    res.render('sellerProfile', {seller});
+  } catch (error) {
+    console.log(error.message);
+    res.redirect('feed')
+  }
+});
+
+/* POST Razorpay Payment  */
+router.post('/createOrder', require('../routes/razorpay'));
 
 
 

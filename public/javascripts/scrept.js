@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function toggleAvilableProductRaper() {
-    
+
     isAvilableProductRaperVisible = !isAvilableProductRaperVisible;
     const leftValue = isAvilableProductRaperVisible ? "0%" : "-100%";
     const widthValue = window.innerWidth <= 640 ? '100%' : '40%';
@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function () {
     slidesPerView: "auto",
     spaceBetween: 30,
     autoplay: {
-      delay: 3000, // Set the autoplay delay in milliseconds
+      delay: 3000, 
     },
     navigation: {
       nextEl: ".swiper-button-next",
@@ -212,49 +212,3 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
-
-function showingAllSelectedProduct(url, price, productName, quantity) {
-  const avilableProductRaper = document.querySelector('.avilableProductRaper');
-  const product = `
-      <div class="relative">
-        <div class="w-full bg-slate-700 p-4 rounded-md flex flex-wrap justify-between items-center gap-10 top-2 md:mt-3">
-          <div class="productInfo flex-grow">
-            <h3 class="text-white font-semibold">Product Name: ${productName}</h3>
-  
-            <div class="flex items-center gap-3 mt-2">
-              <button class="ri-add-line text-white border border-green-400 px-4 py-2 rounded-full cursor-pointer"></button>
-              <p class="w-16 bg-slate-800 rounded text-white text-center">${quantity}</p>
-              <button class="ri-subtract-line text-white border border-red-400 px-4 py-2 rounded-full cursor-pointer"></button>
-            </div>
-            <p class="text-green-400 mt-2"><span class="text-white">MRP of One Piece:</span> ₹ ${price}</p>
-          </div>
-          <div class="img-container">
-            <img src="${url}" alt="" class="w-48 h-24 rounded">
-          </div>
-        </div>
-      </div>
-    `;
-
-  avilableProductRaper.innerHTML += product;
-}
-
-for (let i = 0; i < 10; i++) {
-  showingAllSelectedProduct(products[0].url, products[0].mrp, products[0].productName, products[0].quantity);  
-}
-
-function appendTotalAmountSection(price, quantity) {
-  const avilableProductRaper = document.querySelector('.avilableProductRaper');
-  const totalAmountSection = `
-      <div class="bottom-0 left-0 w-full text-white bg-gray-800 p-4 mt-4">
-        <h1 class="text-center mb-2">Total Amount : <span class="totalAmount">₹ ${price * quantity}</span></h1>
-        <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
-        <button class="bg-green-800 text-white rounded-md w-full py-2 payNow">
-          Make Payment Here <i class="ri-corner-right-up-line ml-1"></i>
-        </button>
-      </div>
-    `;
-
-  avilableProductRaper.innerHTML += totalAmountSection;
-}
-
-appendTotalAmountSection(products[0].mrp, products[0].quantity);

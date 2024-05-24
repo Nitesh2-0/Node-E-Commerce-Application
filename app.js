@@ -1,5 +1,4 @@
 require('dotenv').config()
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -9,6 +8,7 @@ var usersRouter = require('./models/users');
 const databaseConnection = require('./db');
 const passport = require('passport');
 const expressSession = require('express-session');
+const { addAbortListener } = require('events');
 
 var app = express();
 
@@ -41,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 /** Roote */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 
 /** Page Not Found Error */
 app.use('*', (req,res,next)=>{
