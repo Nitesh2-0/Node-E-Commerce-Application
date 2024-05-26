@@ -11,3 +11,8 @@ This is an E-Commerece Application. Here two type of user can intract with websi
 - Tailwind Css
 - Passport js
   
+## Online Payment 
+I used Rzorpay for recieving online payment.
+
+## Feature
+- User can pay online.
