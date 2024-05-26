@@ -79,7 +79,7 @@
   });
 
   /* GET sellerProfile Page */
-  router.get('/sellerProfile', async (req, res) => {
+  router.get('/sellerProfile', auth, async (req, res) => {
     try {
       const username = req.user.username;
       const authSeller = await userModel.findOne({ username })
@@ -95,7 +95,7 @@
   });
 
   /* POST Razorpay Payment  */
-  router.post('/createOrder', require('../routes/razorpay'));
+  router.post('/createOrder',auth , require('../routes/razorpay'));
 
   /* POST AddToCart Iteam */
   router.post('/feed/addToCart', auth, async (req, res) => {
@@ -128,6 +128,17 @@
     }
   })
 
+  /* POST Delete Cart Items */
+  router.get('/feed/addToCart/show/:name', auth, async(req,res) => {
+    try {
+       await addToCartModel.findOneAndDelete({username:req.user.username, productName:req.params.name})
+      console.log(req.params.name);
+      res.redirect('/feed')
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Internal Server Error');
+    }
+  })
 
 
   module.exports = router;

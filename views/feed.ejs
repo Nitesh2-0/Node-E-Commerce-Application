@@ -68,9 +68,6 @@
         </div>
 
         <div class="flex-shrink-0 flex items-center block md:hidden">
-          <!-- <a href="#"
-                        class="text-white text-2xl font-bold block md:hidden h-12 w-12 overflow-hidden rounded-full"><img
-                            src="./assets/logo1.png" alt="" class=""></a> -->
           <h1 class="text-red-500 font-bold text-xl"><span class="text-yellow-500">POM</span>POM</h1>
         </div>
 
@@ -100,7 +97,7 @@
 
         <!-- Shopping Cart -->
         <div class="relative" id="shopingCart">
-          <i class="ri-shopping-bag-4-fill text-white text-3xl md:text-xl border border-indigo-600 p-2 rounded-full"
+          <i class="ri-shopping-bag-4-fill text-white text-3xl md:text-xl border-2 border-indigo-600 p-2 rounded-full"
             id="showAllProductOfAddToCart">
             <div class="absolute -top-2 left-1/6 transform -translate-x-1/2 flex items-center justify-center">
               <p class="text-white bg-blue-800 px-2 py-1 rounded-full text-xs" id="productAvilable">0</p>
@@ -175,7 +172,7 @@
     </div>
   </div>
 
-  <div class="main w-full h-auto bg-slate-700 text-white p-5 flex gap-5 flex-wrap justify-center pt-5 "
+  <div class="main w-full h-auto bg-slate-700 text-white p-5 flex gap-5 flex-wrap justify-center pt-5"
     id="main-section"></div>
 
   <div
@@ -254,7 +251,7 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/javascripts/scrept.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', () => {
       /* Quantity Update */
       document.querySelectorAll('.quantity').forEach(input => {
         input.addEventListener('input', function () {
@@ -268,14 +265,14 @@
       $(document).ready(() => {
         $('.pay-form').submit(function (e) {
           e.preventDefault();
-          var formData = $(this).serialize();
+          const formData = $(this).serialize();
           $.ajax({
             url: '/createOrder',
             type: 'POST',
             data: formData,
             success: function (res) {
               if (res.success) {
-                var options = {
+                const options = {
                   "key": res.key_id,
                   "amount": res.amount,
                   "currency": "INR",
@@ -297,7 +294,7 @@
                     "color": "#2300a3"
                   }
                 };
-                var razorpayObject = new Razorpay(options);
+                const razorpayObject = new Razorpay(options);
                 razorpayObject.on('payment.failed', function (response) {
                   alert('Payment Failed');
                 });
@@ -310,42 +307,25 @@
         });
       });
 
-      /* Payment Controller */
-      function paymentCont(price) {
-        const payment = `
-          <div class="w-full text-white bg-gray-800 p-4 mt-4">
-            <h1 class="text-center mb-2">Total Amount : <span class="totalAmount">₹ ${price}</span></h1>
-            <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
-            <form class="pay-form">
-              <input type="hidden" value="POMPOM Fruits Store" name="name">
-              <input type="hidden" value="${price}" name="amount">
-              <input type="hidden" value="done" name="description">
-              <input type="submit" value="Pay Now"
-                class="w-full bg-green-600 text-gray-100 py-3 rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
-            </form>
-          </div>`;
-        document.querySelector('.avilableProductRaper').innerHTML += payment;
-      }
-
-      paymentCont(3)
+      // paymentCont(3);
 
       /* Dynamically Add Products */
       function addToCart(price, url, productName, quantity) {
         const item = `
-          <div class="product-entry flex mb-4">
-            <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
-              <div class="product-info flex-grow">
-                <h3 class="text-white font-semibold">Product Name : ${productName}</h3>
-                <p class="text-green-400 mt-2 mb-2"><span class="text-white">MRP of One Piece :</span> ₹ ${price}</p>
-                <input type="number" placeholder="${quantity}"
-                  class="text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
-                <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button>
-              </div>
-              <div class="img-container lg:w-1/2">
-                <img src="${url}" alt="Apple Image" class="rounded">
-              </div>
-            </div>
-          </div>`;
+      <div class="product-entry flex mb-4">
+        <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
+          <div class="product-info flex-grow">
+            <h3 class="text-white font-semibold">Product Name : ${productName}</h3>
+            <p class="text-green-400 mt-2 mb-2"><span class="text-white">MRP of One Piece :</span> ₹ ${price}</p>
+            <input type="number" placeholder="${quantity}"
+              class="text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
+              <a href='/feed/addToCart/show/${productName}'> <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button></a> 
+          </div>
+          <div class="img-container lg:w-1/2">
+            <img src="${url}" alt="${productName} Image" class="rounded">
+          </div>
+        </div>
+      </div>`;
         document.querySelector('.product-list').innerHTML += item;
       }
 
@@ -368,13 +348,11 @@
             productImg: product.querySelector('img').src
           };
           productAvilable.textContent = parseInt(productAvilable.textContent) + 1;
-          console.log(item);
 
           axios.post('/feed/addToCart', item)
             .then(response => {
               const res = response.data;
               window.location.reload();
-              alert('Product added successfully');
             })
             .catch(error => {
               console.log(error);
@@ -385,23 +363,21 @@
         }
       }
 
-      var cost = 0;
+      let cost = 0;
 
       function fetchAndDisplayCartItems() {
         axios.get('/feed/addToCart/show')
           .then(response => {
             const cartItems = response.data;
-
             cartItems.forEach(item => {
-              cost += item.price
+              cost += item.price;
               addToCart(item.price, item.productImg, item.productName, item.quantity);
             });
             productAvilable.textContent = `${cartItems.length}`;
-
+          }).then(() => {
+            // paymentCont(cost);
+            calulatePrice(cost)
           })
-          // .then(() => {
-          //   paymentCont(cost);
-          // })
           .catch(error => {
             console.error('Error fetching data:', error);
           });
@@ -409,10 +385,37 @@
 
       window.onload = fetchAndDisplayCartItems;
 
-      window.addEventListener('load', function () {
+      const calulatePrice = (cost) =>{
+        paymentCont(cost)
+      }
+
+      /* Payment Controller */
+      function paymentCont(price) {
+        const payment = `
+      <div class="w-full text-white bg-gray-800 p-4 mt-4">
+        <h1 class="text-center mb-2">Total Amount : <span class="totalAmount">₹ ${price}</span></h1>
+        <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
+        <form class="pay-form">
+          <input type="hidden" value="POMPOM Fruits Store" name="name">
+          <input type="hidden" value="${price}" name="amount">
+          <input type="hidden" value="done" name="description">
+          <input type="submit" value="Pay Now"
+            class="w-full bg-green-600 text-gray-100 py-3 rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
+        </form>
+      </div>`;
+        document.querySelector('.avilableProductRaper').innerHTML += payment;
+      }
+
+      window.addEventListener('load', () => {
         document.getElementById('loader').classList.add('hidden');
         document.getElementById('loader-background').classList.add('hidden');
       });
+
+      function handleQuantityInput(event) {
+        if (event.target.value < 1) {
+          event.target.value = 1;
+        }
+      }
 
     });
 
