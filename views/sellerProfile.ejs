@@ -39,7 +39,8 @@
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-xl font-bold">Menu</h1>
         <button class="text-gray-100" onclick="toggleMobileMenu()">
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
@@ -58,38 +59,49 @@
     class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-80 flex justify-center items-center z-20 hidden p-2">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/2">
       <h2 class="text-2xl font-semibold mb-4 text-gray-800">Add New Product</h2>
-      <form class="space-y-4">
+      <form id="productForm" class="space-y-4" enctype="multipart/form-data">
+
+        <!-- Product Name -->
         <div>
           <label for="productName" class="block text-sm font-medium text-gray-700">Product Name</label>
           <input type="text" id="productName" name="productName"
             class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
             placeholder="Enter product name" required>
         </div>
+
+        <!-- Quantity (Stock) -->
         <div>
-          <label for="productImage" class="block text-sm font-medium text-gray-700">Product Image</label>
-          <input type="file" id="productImage" name="productImage"
-            class="form-input mt-1 block w-full rounded-md border-2">
-        </div>
-        <div>
-          <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
-          <input type="number" id="quantity" name="quantity"
+          <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
+          <input type="number" id="stock" name="stock"
             class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
             placeholder="Enter quantity" required>
         </div>
+
+        <!-- Offer -->
         <div>
           <label for="offer" class="block text-sm font-medium text-gray-700">Offer</label>
-          <input type="text" id="offer" name="offer"
+          <input type="number" id="offer" name="offer"
             class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
             placeholder="Enter offer">
         </div>
+
+        <!-- Price -->
         <div>
-          <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-          <input type="number" id="price" name="price"
+          <label for="productPrice" class="block text-sm font-medium text-gray-700">Price</label>
+          <input type="number" id="productPrice" name="productPrice"
             class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
             placeholder="Enter price" required>
         </div>
+
+         <!-- Product Image -->
+         <div>
+          <label for="image" class="block text-sm font-medium text-gray-700">Product Images</label>
+          <input type="file" id="images" name="images" class="form-input mt-1 block w-full rounded-md border-2" multiple accept="image/*" required >
+        </div>
+
+        <!-- Buttons -->
         <div class="flex justify-end">
-          <button type="submit"
+          <button type="button" onclick="submitForm()"
             class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 border-2">
             Add Product
           </button>
@@ -140,21 +152,26 @@
       </div>
     </div>
   </div>
-  
+
 
   <div class="h-full overflow-auto mt-16 flex flex-wrap gap-5 justify-center py-2 px-2">
-    <div class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-      <img src="https://cdn.britannica.com/95/126995-050-101B8B8D/Sweetsop.jpg" alt="Apple" class="h-48 w-full object-cover">
+    <div
+      class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
+      <img src="https://cdn.britannica.com/95/126995-050-101B8B8D/Sweetsop.jpg" alt="Apple"
+        class="h-48 w-full object-cover">
       <div class="p-4">
         <h1 class="text-xl font-semibold text-gray-800">Name: Apple</h1>
         <h1 class="text-lg text-gray-600">Price: $99</h1>
         <p class="mt-2 text-gray-700">Description:</p>
         <div class="max-h-12 overflow-y-auto mt-1 p-1  rounded-md bg-gray-50">
           <p class="text-gray-600">
-            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and minerals, and have been associated with improved heart health, reduced cancer risk, and weight management. Apples can be enjoyed fresh, in juices, or as part of various recipes.
+            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and
+            minerals, and have been associated with improved heart health, reduced cancer risk, and weight management.
+            Apples can be enjoyed fresh, in juices, or as part of various recipes.
           </p>
           <p class="text-gray-600">
-            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile. Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
+            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile.
+            Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
           </p>
         </div>
         <div class="flex justify-between mt-4">
@@ -162,19 +179,24 @@
           <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
         </div>
       </div>
-    </div>    
-    <div class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-      <img src="https://usaapples.com/wp-content/uploads/2020/06/braeburn.jpg" alt="Apple" class="h-48 w-full object-cover">
+    </div>
+    <div
+      class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
+      <img src="https://usaapples.com/wp-content/uploads/2020/06/braeburn.jpg" alt="Apple"
+        class="h-48 w-full object-cover">
       <div class="p-4">
         <h1 class="text-xl font-semibold text-gray-800">Name: Apple</h1>
         <h1 class="text-lg text-gray-600">Price: $99</h1>
         <p class="mt-2 text-gray-700">Description:</p>
         <div class="max-h-12 overflow-y-auto mt-1 p-1  rounded-md bg-gray-50">
           <p class="text-gray-600">
-            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and minerals, and have been associated with improved heart health, reduced cancer risk, and weight management. Apples can be enjoyed fresh, in juices, or as part of various recipes.
+            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and
+            minerals, and have been associated with improved heart health, reduced cancer risk, and weight management.
+            Apples can be enjoyed fresh, in juices, or as part of various recipes.
           </p>
           <p class="text-gray-600">
-            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile. Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
+            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile.
+            Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
           </p>
         </div>
         <div class="flex justify-between mt-4">
@@ -182,19 +204,24 @@
           <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
         </div>
       </div>
-    </div>       
-    <div class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-      <img src="https://usaapples.com/wp-content/uploads/2020/06/braeburn.jpg" alt="Apple" class="h-48 w-full object-cover">
+    </div>
+    <div
+      class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
+      <img src="https://usaapples.com/wp-content/uploads/2020/06/braeburn.jpg" alt="Apple"
+        class="h-48 w-full object-cover">
       <div class="p-4">
         <h1 class="text-xl font-semibold text-gray-800">Name: Apple</h1>
         <h1 class="text-lg text-gray-600">Price: $99</h1>
         <p class="mt-2 text-gray-700">Description:</p>
         <div class="max-h-12 overflow-y-auto mt-1 p-1  rounded-md bg-gray-50">
           <p class="text-gray-600">
-            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and minerals, and have been associated with improved heart health, reduced cancer risk, and weight management. Apples can be enjoyed fresh, in juices, or as part of various recipes.
+            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and
+            minerals, and have been associated with improved heart health, reduced cancer risk, and weight management.
+            Apples can be enjoyed fresh, in juices, or as part of various recipes.
           </p>
           <p class="text-gray-600">
-            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile. Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
+            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile.
+            Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
           </p>
         </div>
         <div class="flex justify-between mt-4">
@@ -202,7 +229,7 @@
           <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
         </div>
       </div>
-    </div>             
+    </div>
   </div>
 
 
@@ -228,6 +255,29 @@
       var form = document.getElementById("status");
       form.classList.toggle("hidden");
     }
+
+    function submitForm() {
+      const form = document.getElementById('productForm');
+      const formData = new FormData(form);
+      // formData.forEach((e) => console.log(e))
+
+      fetch('/sellerProfile/add-product', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        if (response.ok) {
+          alert('Product added successfully');
+          form.reset();
+          document.getElementById('addProductForm').classList.add('hidden');
+        } else {
+          alert('Failed to add product');
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+        alert('Error adding product');
+      });
+    }
+
 
   </script>
 </body>

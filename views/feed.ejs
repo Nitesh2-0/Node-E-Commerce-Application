@@ -9,12 +9,55 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="./assets/log2.png" type="image/x-icon">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <style>
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loader {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top-color: #3490dc;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: spin 1s linear infinite;
+      z-index: 100;
+    }
+
+    .loader-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      opacity: 0.5;
+      z-index: 99;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body class="bg-slate-700">
+
+  <div id="loader-background" class="loader-background"></div>
+  <div id="loader" class="loader"></div>
+
   <nav class="bg-gray-800 shadow-lg p-2  fixed top-0 w-full z-10 ">
     <div class="px-6">
       <div class="flex justify-between items-center p-2">
@@ -51,7 +94,7 @@
           <input type="text" placeholder="Search Products"
             class="px-3 w-[100%] py-2 w-64 bg-slate-700 text-white rounded-r focus:outline-none placeholder-gray-400">
           <div class="p-2 bg-gray-600 h-full rounded-r flex items-center">
-            <i class="fas fa-search text-white text-xs p-1 cursor-pointer"></i>
+            <i class="ri-search-line"></i>
           </div>
         </div>
 
@@ -139,33 +182,6 @@
     class="fixed top-[7%] md:top-[13%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[87%]">
     <h3 class="text-xl font-semibold text-gray-200 text-center mb-2">All Selected Collections</h3>
     <div class="product-list">
-      <div class="product-entry flex mb-4">
-        <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
-          <div class="product-info flex-grow">
-            <h3 class="text-white font-semibold">Product Name : Apple</h3>
-            <p class="text-green-400 mt-2 mb-2"><span class="text-white">MRP of One Piece :</span> ₹ 99</p>
-            <input type="number" placeholder="1"
-              class="remove-product-btn text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
-            <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button>
-          </div>
-          <div class="img-container lg:w-1/2">
-            <img
-              src="https://images.unsplash.com/photo-1474169482634-9d0381a70510?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Apple Image" class="rounded">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="w-full text-white bg-gray-800 p-4 mt-4">
-      <h1 class="text-center mb-2">Total Amount : <span class="totalAmount">₹ 99</span></h1>
-      <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
-      <form class="pay-form">
-        <input type="hidden" value="POMPOM Fruits Store" name="name">
-        <input type="hidden" value="99" name="amount">
-        <input type="hidden" value="done" name="description">
-        <input type="submit" value="Pay Now"
-          class="w-full bg-green-600 text-gray-100 py-3 rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
-      </form>
     </div>
   </div>
 
@@ -233,63 +249,171 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/javascripts/scrept.js"></script>
   <script>
-    /* Quantity Update */
-    document.querySelectorAll('.quantity').forEach(input => {
-      input.addEventListener('input', function () {
-        if (this.value < 1) {
-          this.value = 1;
-        }
-      });
-    });
-
-    /* Razorpay-Request */
-    $(document).ready(() => {
-      $('.pay-form').submit(function (e) {
-        e.preventDefault();
-        var formData = $(this).serialize();
-        $.ajax({
-          url: '/createOrder',
-          type: 'POST',
-          data: formData,
-          success: function (res) {
-            if (res.success) {
-              var options = {
-                "key": res.key_id,
-                "amount": res.amount,
-                "currency": "INR",
-                "name": res.product_name,
-                "image": "https://plus.unsplash.com/premium_photo-1678187782578-70b5a348f502?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "order_id": res.order_id,
-                "handler": function (response) {
-                  alert('Payment Successful');
-                },
-                "prefill": {
-                  "contact": res.contact,
-                  "name": res.name,
-                  "email": res.email
-                },
-                "notes": {
-                  "description": res.description
-                },
-                "theme": {
-                  "color": "#2300a3"
-                }
-              };
-              var razorpayObject = new Razorpay(options);
-              razorpayObject.on('payment.failed', function (response) {
-                alert('Payment Failed');
-              });
-              razorpayObject.open();
-            } else {
-              alert(res.msg);
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+      /* Quantity Update */
+      document.querySelectorAll('.quantity').forEach(input => {
+        input.addEventListener('input', function () {
+          if (this.value < 1) {
+            this.value = 1;
           }
         });
       });
+
+      /* Razorpay-Request */
+      $(document).ready(() => {
+        $('.pay-form').submit(function (e) {
+          e.preventDefault();
+          var formData = $(this).serialize();
+          $.ajax({
+            url: '/createOrder',
+            type: 'POST',
+            data: formData,
+            success: function (res) {
+              if (res.success) {
+                var options = {
+                  "key": res.key_id,
+                  "amount": res.amount,
+                  "currency": "INR",
+                  "name": res.product_name,
+                  "image": "https://plus.unsplash.com/premium_photo-1678187782578-70b5a348f502?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                  "order_id": res.order_id,
+                  "handler": function (response) {
+                    alert('Payment Successful');
+                  },
+                  "prefill": {
+                    "contact": res.contact,
+                    "name": res.name,
+                    "email": res.email
+                  },
+                  "notes": {
+                    "description": res.description
+                  },
+                  "theme": {
+                    "color": "#2300a3"
+                  }
+                };
+                var razorpayObject = new Razorpay(options);
+                razorpayObject.on('payment.failed', function (response) {
+                  alert('Payment Failed');
+                });
+                razorpayObject.open();
+              } else {
+                alert(res.msg);
+              }
+            }
+          });
+        });
+      });
+
+      /* Payment Controller */
+      function paymentCont(price) {
+        const payment = `
+          <div class="w-full text-white bg-gray-800 p-4 mt-4">
+            <h1 class="text-center mb-2">Total Amount : <span class="totalAmount">₹ ${price}</span></h1>
+            <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
+            <form class="pay-form">
+              <input type="hidden" value="POMPOM Fruits Store" name="name">
+              <input type="hidden" value="${price}" name="amount">
+              <input type="hidden" value="done" name="description">
+              <input type="submit" value="Pay Now"
+                class="w-full bg-green-600 text-gray-100 py-3 rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
+            </form>
+          </div>`;
+        document.querySelector('.avilableProductRaper').innerHTML += payment;
+      }
+
+      paymentCont(3)
+
+      /* Dynamically Add Products */
+      function addToCart(price, url, productName, quantity) {
+        const item = `
+          <div class="product-entry flex mb-4">
+            <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
+              <div class="product-info flex-grow">
+                <h3 class="text-white font-semibold">Product Name : ${productName}</h3>
+                <p class="text-green-400 mt-2 mb-2"><span class="text-white">MRP of One Piece :</span> ₹ ${price}</p>
+                <input type="number" placeholder="${quantity}"
+                  class="text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
+                <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button>
+              </div>
+              <div class="img-container lg:w-1/2">
+                <img src="${url}" alt="Apple Image" class="rounded">
+              </div>
+            </div>
+          </div>`;
+        document.querySelector('.product-list').innerHTML += item;
+      }
+
+      const parentElement = document.querySelector('.main');
+      if (parentElement) {
+        parentElement.addEventListener("click", function (event) {
+          if (event.target.classList.contains('addBtn')) {
+            handlingAddToCartBtn(event);
+          }
+        });
+      }
+
+      function handlingAddToCartBtn(event) {
+        const button = event.target;
+        const product = button.closest('.cartFrame');
+        if (product) {
+          const item = {
+            productName: product.querySelector('.contsPname').textContent,
+            price: parseInt(product.querySelector('.price').textContent.slice(1).trim()),
+            productImg: product.querySelector('img').src
+          };
+          productAvilable.textContent = parseInt(productAvilable.textContent) + 1;
+          console.log(item);
+
+          axios.post('/feed/addToCart', item)
+            .then(response => {
+              const res = response.data;
+              window.location.reload();
+              alert('Product added successfully');
+            })
+            .catch(error => {
+              console.log(error);
+              alert('Something went wrong');
+            });
+        } else {
+          alert('Product Not Found')
+        }
+      }
+
+      var cost = 0;
+
+      function fetchAndDisplayCartItems() {
+        axios.get('/feed/addToCart/show')
+          .then(response => {
+            const cartItems = response.data;
+
+            cartItems.forEach(item => {
+              cost += item.price
+              addToCart(item.price, item.productImg, item.productName, item.quantity);
+            });
+            productAvilable.textContent = `${cartItems.length}`;
+
+          })
+          // .then(() => {
+          //   paymentCont(cost);
+          // })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      }
+
+      window.onload = fetchAndDisplayCartItems;
+
+      window.addEventListener('load', function () {
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('loader-background').classList.add('hidden');
+      });
+
     });
 
   </script>

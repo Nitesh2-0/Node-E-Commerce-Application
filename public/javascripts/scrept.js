@@ -113,29 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
     avilableProductRaper.style.width = widthValue;
   }
 
-  const parentElement = document.querySelector('.main');
-
-  if (parentElement) {
-    parentElement.addEventListener("click", function (event) {
-      if (event.target.classList.contains('addBtn')) {
-        handlingAddToCartBtn(event);
-      }
-    });
-  }
-
-  function handlingAddToCartBtn(event) {
-    const button = event.target;
-    const product = button.closest('.cartFrame');
-    if (product) {
-      const item = {
-        productName: product.querySelector('.contsPname').textContent,
-        price: parseInt(product.querySelector('.price').textContent.slice(1).trim()),
-        productImg: product.querySelector('img').src
-      };
-      productAvilable.textContent = parseInt(productAvilable.textContent) + 1;
-      console.log(item);
-    }
-  }
 
   function designCart(url, price, purchesCount, isAvailable, pName) {
     const cartFrame = document.createElement("div");

@@ -1,99 +1,133 @@
-var express = require('express');
-var router = express.Router();
-const userModel = require('../models/users')
-const passport = require('passport');
-const localStategy = require('passport-local');
-const auth = require('../passport-auth');
-passport.use(new localStategy(userModel.authenticate()));
+  var express = require('express');
+  var router = express.Router();
+  const userModel = require('../models/users')
+  const passport = require('passport');
+  const localStategy = require('passport-local');
+  const auth = require('../passport-auth');
+  const upload = require('./multer')
+  const productModel = require('../models/products')
+  const addToCartModel = require('../models/addToCart');
+  passport.use(new localStategy(userModel.authenticate()));
 
-/* GET Login Page. */
-router.get('/', function (req, res, next) {
-  // res.redirect('/iteam')
-  res.render('login')
-});
+  /* GET Login Page. */
+  router.get('/', function (req, res, next) {
+    // res.redirect('/sellerProfile')
+    res.render('login')
+  });
 
-/* POST Login Page */
-router.post('/login', passport.authenticate('local', {
-  successRedirect: 'feed',
-  failureRedirect: '/'
-}))
+  /* POST Login Page */
+  router.post('/login', passport.authenticate('local', {
+    successRedirect: 'feed',
+    failureRedirect: '/'
+  }))
 
-/* GET Register page */
-router.get('/register', (req, res, next) => {
-  res.render('register', { message: '' })
-})
-
-/* POST Register Page | Error -> Bad Request*/
-router.post('/register', async function (req, res) {
-  try {
-    const { fname, password, email, phone, Locality, State, Zip, sex, Country, CountryCode } = req.body;
-
-    const existingUser = await userModel.findOne({ username: email });
-    if (existingUser) {
-      return res.render('register', { message: 'Email already exists' });
-    }
-    const fullName = fname;
-    const userData = new userModel({ username: email, fullName, email, phone, Locality, State, Zip, sex, Country, CountryCode });
-
-    userModel.register(userData, req.body.password).then(function (registerUser) {
-      passport.authenticate('local')(req, res, function () {
-        res.redirect('/');
-      })
-    })
-
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ message: 'Internal server error', error: error.message });
-  }
-});
-
-/* GET Logout Btn */
-router.get('/logout', function (req, res, next) {
-  req.logout(function (err) {
-    if (err) return next(err);
-    res.redirect("/");
+  /* GET Register page */
+  router.get('/register', (req, res, next) => {
+    res.render('register', { message: '' })
   })
-})
 
-/* GET Feed Page */
-router.get('/feed', auth, async (req, res) => {
-  try {
-    const username = req.user.username;
-    const data = await userModel.findOne({ username });
-    const name = data.fullName.split(' ')[0];
-    const userFeedData = {
-      location: data.State + " " + data.Zip,
-      name: name,
-      img: data.profileImg,
+  /* POST Register Page | Error -> Bad Request*/
+  router.post('/register', async function (req, res) {
+    try {
+      const { fname, password, email, phone, Locality, State, Zip, sex, Country, CountryCode } = req.body;
+
+      const existingUser = await userModel.findOne({ username: email });
+      if (existingUser) {
+        return res.render('register', { message: 'Email already exists' });
+      }
+      const fullName = fname;
+      const userData = new userModel({ username: email, fullName, email, phone, Locality, State, Zip, sex, Country, CountryCode });
+
+      userModel.register(userData, req.body.password).then(function (registerUser) {
+        passport.authenticate('local')(req, res, function () {
+          res.redirect('/');
+        })
+      })
+
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).json({ message: 'Internal server error', error: error.message });
     }
-    if (!data) {
-      return res.redirect('/register');
+  });
+
+  /* GET Logout Btn */
+  router.get('/logout', function (req, res, next) {
+    req.logout(function (err) {
+      if (err) return next(err);
+      res.redirect("/");
+    })
+  })
+
+  /* GET Feed Page */
+  router.get('/feed', auth, async (req, res) => {
+    try {
+      const username = req.user.username;
+      const data = await userModel.findOne({ username });
+      const name = data.fullName.split(' ')[0];
+      const userFeedData = {
+        location: data.State + " " + data.Zip,
+        name: name,
+        img: data.profileImg,
+      }
+      if (!data) {
+        return res.redirect('/register');
+      }
+      res.render('feed', { userFeedData })
+    } catch (error) {
+      res.redirect('/register');
     }
-    res.render('feed', { userFeedData })
-  } catch (error) {
-    res.redirect('/register');
-  }
-});
+  });
 
-/* GET sellerProfile Page */
-router.get('/sellerProfile', async (req, res) => {
-  try {
-    const username = req.user.username;
-    const authSeller = await userModel.findOne({username})
-    const seller = {
-      profileImg:authSeller.profileImg,
-      sellerName: authSeller.fullName.split(' ')[0]
+  /* GET sellerProfile Page */
+  router.get('/sellerProfile', async (req, res) => {
+    try {
+      const username = req.user.username;
+      const authSeller = await userModel.findOne({ username })
+      const seller = {
+        profileImg: authSeller.profileImg,
+        sellerName: authSeller.fullName.split(' ')[0]
+      }
+      res.render('sellerProfile', { seller });
+    } catch (error) {
+      console.log(error.message);
+      res.redirect('feed')
     }
-    res.render('sellerProfile', {seller});
-  } catch (error) {
-    console.log(error.message);
-    res.redirect('feed')
-  }
-});
+  });
 
-/* POST Razorpay Payment  */
-router.post('/createOrder', require('../routes/razorpay'));
+  /* POST Razorpay Payment  */
+  router.post('/createOrder', require('../routes/razorpay'));
+
+  /* POST AddToCart Iteam */
+  router.post('/feed/addToCart', auth, async (req, res) => {
+    try {
+      const { productName, price, productImg } = req.body
+      const username = req.user.username;
+      const newIteam = new addToCartModel({
+        productName: productName,
+        productImg: productImg,
+        price: price,
+        username: username
+      })
+      const data = await newIteam.save();
+
+      res.status(200).send(data)
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, msg: 'Internal Server Error' })
+    }
+  })
+
+  /* GET AddToCaet Item  */
+  router.get('/feed/addToCart/show',auth, async (req,res) => {
+    try {
+      const cartProduct = await addToCartModel.find({username:req.user.username})
+      res.status(200).send(cartProduct)
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Internal Server Error')
+    }
+  })
 
 
 
-module.exports = router;
+  module.exports = router;

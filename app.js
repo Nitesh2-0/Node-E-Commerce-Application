@@ -8,8 +8,6 @@ var usersRouter = require('./models/users');
 const databaseConnection = require('./db');
 const passport = require('passport');
 const expressSession = require('express-session');
-const { addAbortListener } = require('events');
-
 var app = express();
 
 /** Database Connected */
@@ -19,7 +17,7 @@ databaseConnection()
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-/** passport-js */
+/* passport-js start */
 app.use(expressSession({
   resave:false, 
   saveUninitialized:false,
@@ -30,6 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session()); 
 passport.serializeUser(usersRouter.serializeUser());
 passport.deserializeUser(usersRouter.deserializeUser());
+/* passport-js start End*/
 
 /**Basic Requirement */
 app.use(logger('dev'));
