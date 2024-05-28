@@ -8,7 +8,7 @@ const productSchema = new Schema({
   },
   sellerId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', 
+    ref: 'User',
     required: true
   },
   productPrice: {
@@ -16,16 +16,22 @@ const productSchema = new Schema({
     required: true
   },
   offer: {
-    type: Number, 
+    type: Number,
     default: 0
   },
   stock: {
     type: Number,
     required: true
   },
-  images: {
-    type: [String], 
-    required: true
+  images: [
+    {
+      type: String,
+      required: true
+    }
+  ],
+  descpt: {
+    type: String,
+    require: true
   }
 });
 

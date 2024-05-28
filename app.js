@@ -42,11 +42,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-/** Page Not Found Error */
-app.use('*', (req,res,next)=>{
-  res.render('NotFound')
-})
-
 // error handler
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;

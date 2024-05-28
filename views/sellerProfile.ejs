@@ -5,23 +5,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seller Dashboard</title>
+  <link rel="shortcut icon" href="/images/assets/log2.png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    #scroller-x::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
-
   <nav class="bg-white fixed top-0 w-full z-10 shadow">
     <div class="container mx-auto flex justify-between items-center p-4 px-8">
       <a href="/sellerProfile" class="text-blue-700 font-bold text-xl">Dashboard</a>
-      <ul class="hidden lg:flex items-center space-x-4">
-        <li><a href="#" class="text-gray-900">Home</a></li>
-        <li><a href="#" class="text-gray-900" onclick="openForm()">Create-Product</a></li>
-        <li><a href="#" class="text-gray-900" onclick="openStatusSection()">Order-Status</a></li>
+      <ul class="hidden lg:flex items-center space-x-4 text-gray-900 cursor-pointer">
+        <li>Home</li>
+        <li onclick="openForm()">Create-Product</li>
+        <li onclick="openStatusSection()">Order-Status</li>
       </ul>
       <div class="flex items-center">
         <img src="<%= seller.profileImg %>" alt="Profile Image"
           class="w-8 h-8 rounded-full object-cover mr-2 border cursor-pointer">
-        <span class="text-gray-700">Nitesh</span>
+        <span class="text-gray-700">
+          <%= seller.sellerName %>
+        </span>
       </div>
       <button class="lg:hidden text-gray-700 focus:outline-none" onclick="toggleMobileMenu()">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -31,7 +38,6 @@
     </div>
     <div class="border-t border-gray-200"></div>
   </nav>
-
   <!-- Mobile View of Nav -->
   <div id="mobileMenu"
     class="fixed bg-gray-100 text-gray-700 z-50 w-2/3 h-auto right-0 top-0 transform translate-x-full transition-transform lg:hidden">
@@ -45,68 +51,84 @@
           </svg>
         </button>
       </div>
-      <ul class="space-y-4">
-        <li><a href="#" class="text-gray-800 block" onclick="toggleMobileMenu()">Home</a></li>
-        <li><a href="#" class="text-gray-800 block" onclick="openForm()">Create-Product</a></li>
-        <li><a href="#" class="text-gray-800 block" onclick="openStatusSection()">Order-Status</a></li>
+      <ul class="space-y-4 block text-gray-800">
+        <li onclick="toggleMobileMenu()">Home</li>
+        <li onclick="openForm()">Create-Product</li>
+        <li onclick="openStatusSection()">Order-Status</li>
       </ul>
     </div>
     <a href="/logout" class="px-10 py-2 rounded bg-red-700 flex text-gray-100 justify-center mt-16">Logout</a>
   </div>
 
-
   <div id="addProductForm"
     class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-80 flex justify-center items-center z-20 hidden p-2">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full lg:w-1/2">
       <h2 class="text-2xl font-semibold mb-4 text-gray-800">Add New Product</h2>
-      <form id="productForm" class="space-y-4" enctype="multipart/form-data">
+      <form id="productForm" action="/sellerProfile/Create-Product" method="post" class="space-y-6"
+        enctype="multipart/form-data">
 
         <!-- Product Name -->
         <div>
-          <label for="productName" class="block text-sm font-medium text-gray-700">Product Name</label>
-          <input type="text" id="productName" name="productName"
-            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
+          <label for="productName" class="block text-sm font-medium text-gray-700">Product Name <span
+              class="text-red-500">*</span></label>
+          <input type="text" id="productName" name="productName" value=""
+            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-gray-300 border-2"
             placeholder="Enter product name" required>
+        </div>
+
+        <!-- Product Description -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700">Product Description <span
+              class="text-red-500">*</span></label>
+          <input type="text" id="description" name="descpt" value=""
+            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-gray-300 border-2"
+            placeholder="Enter product Description" required>
         </div>
 
         <!-- Quantity (Stock) -->
         <div>
-          <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
-          <input type="number" id="stock" name="stock"
-            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
+          <label for="stock" class="block text-sm font-medium text-gray-700">Stock <span
+              class="text-red-500">*</span></label>
+          <input type="number" id="stock" name="stock" value="" min="1"
+            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-gray-300 border-2"
             placeholder="Enter quantity" required>
         </div>
 
         <!-- Offer -->
         <div>
-          <label for="offer" class="block text-sm font-medium text-gray-700">Offer</label>
-          <input type="number" id="offer" name="offer"
-            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
+          <label for="offer" class="block text-sm font-medium text-gray-700">Offer <span
+              class="text-red-500">*</span></label>
+          <input type="number" id="offer" name="offer" value="" min="0"
+            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-gray-300 border-2"
             placeholder="Enter offer">
         </div>
 
         <!-- Price -->
         <div>
-          <label for="productPrice" class="block text-sm font-medium text-gray-700">Price</label>
-          <input type="number" id="productPrice" name="productPrice"
-            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-2"
+          <label for="productPrice" class="block text-sm font-medium text-gray-700">Price <span
+              class="text-red-500">*</span></label>
+          <input type="number" id="productPrice" name="productPrice" value="" min="99"
+            class="form-input mt-1 block w-full rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300 border-gray-300 border-2"
             placeholder="Enter price" required>
         </div>
 
-         <!-- Product Image -->
-         <div>
-          <label for="image" class="block text-sm font-medium text-gray-700">Product Images</label>
-          <input type="file" id="images" name="images" class="form-input mt-1 block w-full rounded-md border-2" multiple accept="image/*" required >
+        <!-- Product Image -->
+        <div>
+          <label for="images" class="block text-sm font-medium text-gray-700">Product Images <span
+              class="text-red-500">*</span></label>
+          <input type="file" id="images" value="" name="images"
+            class="form-input mt-1 p-2 block w-full rounded-md border-gray-300 border-2" multiple accept="image/*"
+            required>
         </div>
 
         <!-- Buttons -->
-        <div class="flex justify-end">
-          <button type="button" onclick="submitForm()"
-            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 border-2">
+        <div class="flex justify-end space-x-2">
+          <button type="submit"
+            class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 border-2 border-blue-500">
             Add Product
           </button>
-          <button type="button" onclick="cancelForm()"
-            class="bg-red-500 text-white py-2 px-4 ml-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600">
+          <button type="button" onclick="document.getElementById('addProductForm').classList.add('hidden');"
+            class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600">
             Cancel
           </button>
         </div>
@@ -114,124 +136,49 @@
     </div>
   </div>
 
-  <div class=" w-full bg-white p-4 hidden" id="status">
-    <div class="overflow-x-auto">
-      <div class="shadow-md rounded-lg overflow-hidden">
-        <table class="w-full bg-white">
-          <thead class="bg-white text-gray-700">
-            <tr>
-              <th class="py-3 px-4 uppercase font-semibold text-sm">Order Id</th>
-              <th class="py-3 px-4 uppercase font-semibold text-sm">Name</th>
-              <th class="py-3 px-4 uppercase font-semibold text-sm">Product Name</th>
-              <th class="py-3 px-4 uppercase font-semibold text-sm">Order Status</th>
-              <th class="py-3 px-4 uppercase font-semibold text-sm">Payment</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-700 text-center">
-            <tr class="bg-gray-100">
-              <td class="py-3 px-4 text-gray-800">017466</td>
-              <td class="py-3 px-4 text-gray-800">Amit Kumar</td>
-              <td class="py-3 px-4 text-gray-800">Lichhi</td>
-              <td class="py-3 px-4 text-green-500">Delivered</td>
-              <td class="py-3 px-4 text-green-500 font-semibold">Received</td>
-            </tr>
-            <tr class="bg-gray-100">
-              <td class="py-3 px-4 text-gray-800">017467</td>
-              <td class="py-3 px-4 text-gray-800">Manish Kumar</td>
-              <td class="py-3 px-4 text-gray-800">Kiwi</td>
-              <td class="py-3 px-4 text-red-500">Not Delivered</td>
-              <td class="py-3 px-4 text-red-500 font-semibold">Pending</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="flex justify-center items-center bg-white p-4">
-          <hr class="w-full border-gray-600">
-          <span class="mx-2 text-gray-600 font-semibold">End of Orders</span>
-          <hr class="w-full border-gray-600">
+  <div class="h-screen overflow-y-auto mt-16 flex flex-wrap gap-5 justify-center py-2 px-2" id="scroller-x">
+    <% if(products.length==0){ %>
+      <h1 class="text-red-500 font-bold text-3xl">No Such Product Created By You</h1>
+    <% }else{ %>
+      <% products.forEach(product=> { %>
+        <div class="max-w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden" style="width: 24rem; height: 32rem;">
+          <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
+            <% product.images.forEach(image=> { %>
+              <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full" style="object-position: top;">
+            <% }) %>
+          </div>
+          <div class="p-4">
+            <div class="max-h-8 overflow-x-auto py-1 rounded-md" id="scroller-x">
+              <p class="text-gray-600 font-bold" id="scroller-x">
+                <%= product.productName %>
+              </p>
+            </div>
+            <h1 class="text-lg text-gray-600 font-medium">Price: <span class="text-red-500">₹ <%= product.productPrice %></span></h1>
+            <div class="max-h-12 overflow-y-auto py-1 rounded-md" id="scroller-x">
+              <p class="text-gray-600">
+                <%= product.descpt %>
+              </p>
+            </div>
+            <div class="flex justify-between mt-4">
+              <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white">Remove</button>
+              <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      <% }) %>
+    <% } %>
   </div>
+  
 
-
-  <div class="h-full overflow-auto mt-16 flex flex-wrap gap-5 justify-center py-2 px-2">
-    <div
-      class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-      <img src="https://cdn.britannica.com/95/126995-050-101B8B8D/Sweetsop.jpg" alt="Apple"
-        class="h-48 w-full object-cover">
-      <div class="p-4">
-        <h1 class="text-xl font-semibold text-gray-800">Name: Apple</h1>
-        <h1 class="text-lg text-gray-600">Price: $99</h1>
-        <p class="mt-2 text-gray-700">Description:</p>
-        <div class="max-h-12 overflow-y-auto mt-1 p-1  rounded-md bg-gray-50">
-          <p class="text-gray-600">
-            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and
-            minerals, and have been associated with improved heart health, reduced cancer risk, and weight management.
-            Apples can be enjoyed fresh, in juices, or as part of various recipes.
-          </p>
-          <p class="text-gray-600">
-            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile.
-            Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
-          </p>
-        </div>
-        <div class="flex justify-between mt-4">
-          <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white">Remove</button>
-          <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
-        </div>
+  <hr>
+  <footer class="footer">
+    <div class="container mx-auto py-8 px-4">
+      <div class="flex justify-between items-center">
+        <p class="text-sm text-gray-600">© 2024 POPPOM Store. All rights reserved.</p>
+        <p class="text-sm text-gray-600">Contact us: pompom123@gmail.com</p>
       </div>
     </div>
-    <div
-      class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-      <img src="https://usaapples.com/wp-content/uploads/2020/06/braeburn.jpg" alt="Apple"
-        class="h-48 w-full object-cover">
-      <div class="p-4">
-        <h1 class="text-xl font-semibold text-gray-800">Name: Apple</h1>
-        <h1 class="text-lg text-gray-600">Price: $99</h1>
-        <p class="mt-2 text-gray-700">Description:</p>
-        <div class="max-h-12 overflow-y-auto mt-1 p-1  rounded-md bg-gray-50">
-          <p class="text-gray-600">
-            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and
-            minerals, and have been associated with improved heart health, reduced cancer risk, and weight management.
-            Apples can be enjoyed fresh, in juices, or as part of various recipes.
-          </p>
-          <p class="text-gray-600">
-            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile.
-            Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
-          </p>
-        </div>
-        <div class="flex justify-between mt-4">
-          <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white">Remove</button>
-          <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
-        </div>
-      </div>
-    </div>
-    <div
-      class="w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-      <img src="https://usaapples.com/wp-content/uploads/2020/06/braeburn.jpg" alt="Apple"
-        class="h-48 w-full object-cover">
-      <div class="p-4">
-        <h1 class="text-xl font-semibold text-gray-800">Name: Apple</h1>
-        <h1 class="text-lg text-gray-600">Price: $99</h1>
-        <p class="mt-2 text-gray-700">Description:</p>
-        <div class="max-h-12 overflow-y-auto mt-1 p-1  rounded-md bg-gray-50">
-          <p class="text-gray-600">
-            Apples are nutritious fruits that offer a variety of health benefits. They are rich in fiber, vitamins, and
-            minerals, and have been associated with improved heart health, reduced cancer risk, and weight management.
-            Apples can be enjoyed fresh, in juices, or as part of various recipes.
-          </p>
-          <p class="text-gray-600">
-            These fruits come in various colors, including red, green, and yellow, each with its unique flavor profile.
-            Whether sweet or tart, apples provide a satisfying crunch and are a popular choice for snacking and cooking.
-          </p>
-        </div>
-        <div class="flex justify-between mt-4">
-          <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white">Remove</button>
-          <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  </footer>
 
   <script>
 
@@ -254,28 +201,6 @@
     function openStatusSection() {
       var form = document.getElementById("status");
       form.classList.toggle("hidden");
-    }
-
-    function submitForm() {
-      const form = document.getElementById('productForm');
-      const formData = new FormData(form);
-      // formData.forEach((e) => console.log(e))
-
-      fetch('/sellerProfile/add-product', {
-        method: 'POST',
-        body: formData
-      }).then(response => {
-        if (response.ok) {
-          alert('Product added successfully');
-          form.reset();
-          document.getElementById('addProductForm').classList.add('hidden');
-        } else {
-          alert('Failed to add product');
-        }
-      }).catch(error => {
-        console.error('Error:', error);
-        alert('Error adding product');
-      });
     }
 
 

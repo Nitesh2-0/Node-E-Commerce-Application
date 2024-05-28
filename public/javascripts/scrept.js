@@ -81,111 +81,109 @@ let products = [
   },
 ];
 
-document.addEventListener("DOMContentLoaded", function () {
-  const profileBtn = document.getElementById("profile-btn");
-  const profileDropdown = document.getElementById("profile-dropdown");
-  const logoutBtn = document.getElementById("logout-btn");
-  const shopingBag = document.getElementById('shopingCart');
-  const main = document.querySelector(".main");
-  const mostFrequentSearch = document.querySelector('.mostFrequent');
-  const productAvilable = document.getElementById("productAvilable");
-  const addOption = document.getElementById('addOption');
+const profileBtn = document.getElementById("profile-btn");
+const profileDropdown = document.getElementById("profile-dropdown");
+const logoutBtn = document.getElementById("logout-btn");
+const main = document.querySelector(".main");
+const mostFrequentSearch = document.querySelector('.mostFrequent');
 
-  let isProfileVisible = false;
-  let isAvilableProductRaperVisible = false;
-  const avilableProductRaper = document.querySelector('.avilableProductRaper');
+const addOption = document.getElementById('addOption');
+let isProfileVisible = false;
 
-  profileBtn.addEventListener('click', toggleProfileDropdown);
-  logoutBtn.addEventListener("click", () => console.log("Logged out"));
-  shopingBag.addEventListener('click', toggleAvilableProductRaper);
-
-  function toggleProfileDropdown(event) {
-    isProfileVisible = !isProfileVisible;
-    profileDropdown.style.display = isProfileVisible ? 'block' : 'none';
-  }
-
-  function toggleAvilableProductRaper() {
-
-    isAvilableProductRaperVisible = !isAvilableProductRaperVisible;
-    const leftValue = isAvilableProductRaperVisible ? "0%" : "-100%";
-    const widthValue = window.innerWidth <= 640 ? '100%' : '40%';
-    avilableProductRaper.style.left = leftValue;
-    avilableProductRaper.style.width = widthValue;
-  }
+profileBtn.addEventListener('click', toggleProfileDropdown);
+logoutBtn.addEventListener("click", () => console.log("Logged out"));
 
 
-  function designCart(url, price, purchesCount, isAvailable, pName) {
-    const cartFrame = document.createElement("div");
-    cartFrame.className = "cartFrame";
+function designCart(url, price, purchesCount, isAvailable, pName) {
+  const cartFrame = document.createElement("div");
+  cartFrame.className = "cartFrame";
 
-    const img = document.createElement("img");
-    img.src = url;
-    img.className = "img";
+  const img = document.createElement("img");
+  img.src = url;
+  img.className = "img";
 
-    const priceAndAddToCartRapped = document.createElement("div");
-    priceAndAddToCartRapped.className = "container1";
+  const priceAndAddToCartRapped = document.createElement("div");
+  priceAndAddToCartRapped.className = "container1";
 
-    const priceElement = document.createElement("p");
-    priceElement.className = "price";
-    priceElement.innerHTML = `₹ ${price}`;
+  const priceElement = document.createElement("p");
+  priceElement.className = "price";
+  priceElement.innerHTML = `₹ ${price}`;
 
-    const addToCartBtn = document.createElement("button");
-    addToCartBtn.className = "addBtn";
-    addToCartBtn.innerHTML = "Add To Cart";
+  const addToCartBtn = document.createElement("button");
+  addToCartBtn.className = "addBtn";
+  addToCartBtn.innerHTML = "Add To Cart";
 
-    const soldItemAndReadyToDeliverRapped = document.createElement("div");
-    soldItemAndReadyToDeliverRapped.className = "container2";
+  const soldItemAndReadyToDeliverRapped = document.createElement("div");
+  soldItemAndReadyToDeliverRapped.className = "container2";
 
-    const soldItemTillNow = document.createElement("p");
-    soldItemTillNow.className = "soldItem";
-    soldItemTillNow.innerHTML = `<i class="ri-eye-fill"></i> ${purchesCount}`;
+  const soldItemTillNow = document.createElement("p");
+  soldItemTillNow.className = "soldItem";
+  soldItemTillNow.innerHTML = `<i class="ri-eye-fill"></i> ${purchesCount}`;
 
-    const readyForDeliveryToday = document.createElement("p");
-    readyForDeliveryToday.className = "deliveringToday";
-    readyForDeliveryToday.innerHTML = `Available: ${isAvailable ? 'Yes' : 'No'}`;
+  const readyForDeliveryToday = document.createElement("p");
+  readyForDeliveryToday.className = "deliveringToday";
+  readyForDeliveryToday.innerHTML = `Available: ${isAvailable ? 'Yes' : 'No'}`;
 
-    const productName = document.createElement('p');
-    productName.className = 'container2 contsPname';
-    productName.textContent = pName;
+  const productName = document.createElement('p');
+  productName.className = 'container2 contsPname';
+  productName.textContent = pName;
 
-    cartFrame.appendChild(img);
-    cartFrame.appendChild(productName);
-    priceAndAddToCartRapped.appendChild(priceElement);
-    priceAndAddToCartRapped.appendChild(addToCartBtn);
-    soldItemAndReadyToDeliverRapped.appendChild(soldItemTillNow);
-    soldItemAndReadyToDeliverRapped.appendChild(readyForDeliveryToday);
-    cartFrame.appendChild(priceAndAddToCartRapped);
-    cartFrame.appendChild(soldItemAndReadyToDeliverRapped);
-    main.appendChild(cartFrame);
-  }
+  cartFrame.appendChild(img);
+  cartFrame.appendChild(productName);
+  priceAndAddToCartRapped.appendChild(priceElement);
+  priceAndAddToCartRapped.appendChild(addToCartBtn);
+  soldItemAndReadyToDeliverRapped.appendChild(soldItemTillNow);
+  soldItemAndReadyToDeliverRapped.appendChild(readyForDeliveryToday);
+  cartFrame.appendChild(priceAndAddToCartRapped);
+  cartFrame.appendChild(soldItemAndReadyToDeliverRapped);
+  main.appendChild(cartFrame);
+}
 
-  function addInputOption(optionValue) {
-    const option = document.createElement('option');
-    option.value = optionValue.trim();
-    option.textContent = optionValue.trim();
-    addOption.appendChild(option);
-  }
+function addInputOption(optionValue) {
+  const option = document.createElement('option');
+  option.value = optionValue.trim();
+  option.textContent = optionValue.trim();
+  addOption.appendChild(option);
+}
 
-  products.forEach(product => {
-    designCart(product.url, product.mrp, product.purchaseCount, product.isAvailable, product.productName);
-    addInputOption(product.productName);
-    mostFrequentSearch.innerHTML += `<a href="#" class="optionTag decoration-0 bg-gray-700 px-2 py-1 rounded"><p class="text-white font-awesome text-xs font-semibold">${product.productName.toUpperCase().trim()}</p></a>`;
-  });
+products.forEach(product => {
+  designCart(product.url, product.mrp, product.purchaseCount, product.isAvailable, product.productName);
+  addInputOption(product.productName);
+  mostFrequentSearch.innerHTML += `<a href="#" class="optionTag decoration-0 bg-gray-700 px-2 py-1 rounded"><p class="text-white font-awesome text-xs font-semibold">${product.productName.toUpperCase().trim()}</p></a>`;
+});
 
-  var swiper = new Swiper(".swiper", {
-    slidesPerView: "auto",
-    spaceBetween: 30,
-    autoplay: {
-      delay: 3000, 
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-  });
 
+function toggleProfileDropdown(event) {
+  isProfileVisible = !isProfileVisible;
+  profileDropdown.style.display = isProfileVisible ? 'block' : 'none';
+}
+
+const productAvilable = document.getElementById("productAvilable");
+const shopingBag = document.getElementById('shopingCart');
+const avilableProductRaper = document.querySelector('.avilableProductRaper');
+let isAvilableProductRaperVisible = false;
+
+shopingBag.addEventListener('click', toggleAvilableProductRaper);
+function toggleAvilableProductRaper() {
+  isAvilableProductRaperVisible = !isAvilableProductRaperVisible;
+  const leftValue = isAvilableProductRaperVisible ? "0%" : "-100%";
+  const widthValue = window.innerWidth <= 640 ? '100%' : '40%';
+  avilableProductRaper.style.left = leftValue;
+  avilableProductRaper.style.width = widthValue;
+}
+
+var swiper = new Swiper(".swiper", {
+  slidesPerView: "auto",
+  spaceBetween: 30,
+  autoplay: {
+    delay: 3000,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
 });

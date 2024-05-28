@@ -7,54 +7,54 @@
   <title>POMPOM Fruits Store Online</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="/images/assets/log2.png" type="image/x-icon">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
-  <link rel="shortcut icon" href="./assets/log2.png" type="image/x-icon">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <style>
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .loader {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-top-color: #3490dc;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: spin 1s linear infinite;
-      z-index: 100;
-    }
-
-    .loader-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-      opacity: 0.5;
-      z-index: 99;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
 </head>
+<style>
+  /* Loader */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #3490dc;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: spin 1s linear infinite;
+    z-index: 100;
+  }
+
+  .loader-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.7;
+    z-index: 99;
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
 
 <body class="bg-slate-700">
-
   <div id="loader-background" class="loader-background"></div>
   <div id="loader" class="loader"></div>
 
@@ -180,6 +180,17 @@
     <h3 class="text-xl font-semibold text-gray-200 text-center mb-2">All Selected Collections</h3>
     <div class="product-list">
     </div>
+    <div class="w-full text-white bg-gray-800 p-4 mt-4">
+      <h1 class="text-center mb-2">Total Amount : ₹ <span class="totalAmount">500</span></h1>
+      <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
+      <form class="pay-form">
+        <input type="hidden" value="POMPOM Fruits Store" name="name">
+        <input type="hidden" value="500" name="amount" id="totals">
+        <input type="hidden" value="done" name="description">
+        <input type="submit" value="Pay Now"
+          class="w-full bg-green-600 text-gray-100 py-3 rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
+      </form>
+    </div>
   </div>
 
   <section class="py-20 px-4 ">
@@ -252,14 +263,6 @@
   <script src="/javascripts/scrept.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      /* Quantity Update */
-      document.querySelectorAll('.quantity').forEach(input => {
-        input.addEventListener('input', function () {
-          if (this.value < 1) {
-            this.value = 1;
-          }
-        });
-      });
 
       /* Razorpay-Request */
       $(document).ready(() => {
@@ -307,8 +310,6 @@
         });
       });
 
-      // paymentCont(3);
-
       /* Dynamically Add Products */
       function addToCart(price, url, productName, quantity) {
         const item = `
@@ -317,7 +318,7 @@
           <div class="product-info flex-grow">
             <h3 class="text-white font-semibold">Product Name : ${productName}</h3>
             <p class="text-green-400 mt-2 mb-2"><span class="text-white">MRP of One Piece :</span> ₹ ${price}</p>
-            <input type="number" placeholder="${quantity}"
+            <input type="number" placeholder="${quantity}" min="1"
               class="text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
               <a href='/feed/addToCart/show/${productName}'> <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button></a> 
           </div>
@@ -363,9 +364,8 @@
         }
       }
 
-      let cost = 0;
-
       function fetchAndDisplayCartItems() {
+        let cost = 0;
         axios.get('/feed/addToCart/show')
           .then(response => {
             const cartItems = response.data;
@@ -375,8 +375,8 @@
             });
             productAvilable.textContent = `${cartItems.length}`;
           }).then(() => {
-            // paymentCont(cost);
-            calulatePrice(cost)
+            document.querySelector('.totalAmount').innerHTML = cost
+            document.querySelector('#totals').value = cost
           })
           .catch(error => {
             console.error('Error fetching data:', error);
@@ -385,37 +385,11 @@
 
       window.onload = fetchAndDisplayCartItems;
 
-      const calulatePrice = (cost) =>{
-        paymentCont(cost)
-      }
-
-      /* Payment Controller */
-      function paymentCont(price) {
-        const payment = `
-      <div class="w-full text-white bg-gray-800 p-4 mt-4">
-        <h1 class="text-center mb-2">Total Amount : <span class="totalAmount">₹ ${price}</span></h1>
-        <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
-        <form class="pay-form">
-          <input type="hidden" value="POMPOM Fruits Store" name="name">
-          <input type="hidden" value="${price}" name="amount">
-          <input type="hidden" value="done" name="description">
-          <input type="submit" value="Pay Now"
-            class="w-full bg-green-600 text-gray-100 py-3 rounded-lg cursor-pointer hover:bg-green-700 transition-colors duration-300">
-        </form>
-      </div>`;
-        document.querySelector('.avilableProductRaper').innerHTML += payment;
-      }
-
+      /* Web-Site Loader */
       window.addEventListener('load', () => {
         document.getElementById('loader').classList.add('hidden');
         document.getElementById('loader-background').classList.add('hidden');
       });
-
-      function handleQuantityInput(event) {
-        if (event.target.value < 1) {
-          event.target.value = 1;
-        }
-      }
 
     });
 
