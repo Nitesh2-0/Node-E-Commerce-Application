@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POMPOM Fruits Store Online</title>
+  <title>E-STORE A-Z Store Online</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="shortcut icon" href="/images/assets/log2.png" type="image/x-icon">
+  <link rel="shortcut icon" href="/images/assets/E-store (1).png" type="image/x-icon">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -52,6 +52,10 @@
   .hidden {
     display: none;
   }
+
+  #scrollBar::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <body class="bg-slate-700">
@@ -63,12 +67,12 @@
       <div class="flex justify-between items-center p-2">
         <!-- Logo -->
         <div class="flex-shrink-0 flex items-center hidden md:block">
-          <a href="#" class="text-white text-2xl hidden md:block font-bold h-16 w-[8rem] overflow-hidden rounded"><img
-              src="/images/assets/log2.png" alt="" class=""></a>
+          <a href="/feed" class="text-white text-2xl hidden md:block font-bold h-auto w-[8rem] overflow-hidden rounded"><img
+              src="/images/assets/E-store (1).png" alt="" class=" rounded"></a>
         </div>
 
         <div class="flex-shrink-0 flex items-center block md:hidden">
-          <h1 class="text-red-500 font-bold text-xl"><span class="text-yellow-500">POM</span>POM</h1>
+          <h1 class="text-red-500 font-bold text-xl">E<span class="text-yellow-500">-</span>STORE</h1>
         </div>
 
         <!-- Delivering Updates -->
@@ -87,6 +91,9 @@
           <select class="search-selectv rounded-l w-16 text-white px-3 py-2 rounded-l bg-slate-700 focus:outline-none"
             id="addOption">
             <option>All</option>
+            <% allProducts.forEach(product=> { %>
+            <option value="<%= product.productName %>"><%= product.productName %></option>
+            <% }) %>
           </select>
           <input type="text" placeholder="Search Products"
             class="px-3 w-[100%] py-2 w-64 bg-slate-700 text-white rounded-r focus:outline-none placeholder-gray-400">
@@ -149,34 +156,70 @@
     </div>
   </nav>
 
-  <div class="w-full h-auto mt-[5%]">
+  <div class="w-full h-auto ">
     <div
-      class="mostFrequent w-full mt-20 md:mt-24 bg-gray-800 flex flex-grow-0 gap-10 items-center p-3 px-7 shadow-slate-700">
+      class="mostFrequent w-full mt-20 bg-gray-800 flex flex-grow-0 gap-10 items-center p-3 px-7 shadow-slate-700">
+      <% allProducts.forEach(product=> { %>
+        <a href="#" class="optionTag decoration-0 bg-gray-700 px-2 py-1 rounded" id=${idx}><p class="text-white font-awesome text-xs font-semibold"><%= product.productName.toUpperCase().trim() %></p></a>
+      <% }) %>
     </div>
     <!-- Swiper -->
-    <div class="swiper mySwiper w-full bg-gray-700">
+    <div class="swiper mySwiper w-full bg-gray-700 hidden md:flex">
       <div class="swiper-wrapper bg-gray-700">
+        <div class="swiper-slide flex justify-center items-center ">
+          <img src="/images/assets/one.png" alt="">
+        </div>
         <div class="swiper-slide flex justify-center items-center">
-          <img src="/images/assets/Nitesh Kumar Yadav (2).png" alt="">
+          <img src="/images/assets/online Banner.png" alt="">
         </div>
         <div class="swiper-slide flex justify-center items-center ">
-          <img src="/images/assets/Nitesh Kumar Yadav (3).png" alt="">
+          <img src="/images/assets/two.png" alt="">
         </div>
         <div class="swiper-slide flex justify-center items-center">
-          <img src="/images/assets/Nitesh Kumar Yadav (2).png" alt="">
+          <img src="/images/assets/Nitesh Kumar Yadav (3).png" alt="">
         </div>
       </div>
       <div class="swiper-button-next text-white"></div>
       <div class="swiper-button-prev text-white"></div>
       <div class="swiper-pagination text-white"></div>
     </div>
+    <div class="w-full h-64 md:hidden">
+      <img src="/images/assets/mobile.png" alt="mobile">
+    </div>
   </div>
 
-  <div class="main w-full h-auto bg-slate-700 text-white p-5 flex gap-5 flex-wrap justify-center pt-5"
-    id="main-section"></div>
+  <div class="main w-full h-auto bg-slate-700 text-white px-5 flex gap-5 flex-wrap justify-center " id="main-section">
+    <% allProducts.forEach(product=> { %>
+      <div
+        class="w-full md:max-w-[20rem] md:max-h-[32rem] shadow-md bg-gray-800 hover:bg-gray-900  border border-gray-700 rounded-lg overflow-hidden cartFrame">
+        <div class="flex overflow-x-auto w-full h-80 w-full" id="scrollBar">
+          <% product.images.forEach(image=> { %>
+            <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
+              style="object-position: top;">
+            <% }) %>
+        </div>
+        <div class="p-4">
+          <div class="max-h-8 overflow-x-auto py-1 rounded-md" id="scrollBar">
+            <p class="text-gray-300 font-semibold text-xs contsPname" id="scrollBar">
+              <%= product.productName %>
+            </p>
+          </div>
+          <div class="max-h-12 overflow-y-auto py-1 rounded-md" id="scrollBar">
+            <p class="text-gray-100 text-sm font-awasone">
+              <%= product.descpt %>
+            </p>
+          </div>
+          <div class="flex justify-between mt-4">
+            <button class="bg-green-900 px-2 rounded-md text-white price">₹ <%= product.productPrice %></button>
+            <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white addBtn">Add To Cart</button>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+  </div>
 
   <div
-    class="fixed top-[7%] md:top-[13%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[87%]">
+    class="fixed top-[7%] md:top-[10%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[90%]">
     <h3 class="text-xl font-semibold text-gray-200 text-center mb-2">All Selected Collections</h3>
     <div class="product-list">
     </div>
@@ -184,7 +227,7 @@
       <h1 class="text-center mb-2">Total Amount : ₹ <span class="totalAmount">500</span></h1>
       <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
       <form class="pay-form">
-        <input type="hidden" value="POMPOM Fruits Store" name="name">
+        <input type="hidden" value="POMPOM A-Z Store Online" name="name">
         <input type="hidden" value="500" name="amount" id="totals">
         <input type="hidden" value="done" name="description">
         <input type="submit" value="Pay Now"
@@ -264,6 +307,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
+      const addOption = document.getElementById('addOption');
+
       /* Razorpay-Request */
       $(document).ready(() => {
         $('.pay-form').submit(function (e) {
@@ -313,20 +358,25 @@
       /* Dynamically Add Products */
       function addToCart(price, url, productName, quantity) {
         const item = `
-      <div class="product-entry flex mb-4">
-        <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
-          <div class="product-info flex-grow">
-            <h3 class="text-white font-semibold">Product Name : ${productName}</h3>
-            <p class="text-green-400 mt-2 mb-2"><span class="text-white">MRP of One Piece :</span> ₹ ${price}</p>
-            <input type="number" placeholder="${quantity}" min="1"
-              class="text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
-              <a href='/feed/addToCart/show/${productName}'> <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button></a> 
-          </div>
-          <div class="img-container lg:w-1/2">
-            <img src="${url}" alt="${productName} Image" class="rounded">
-          </div>
-        </div>
-      </div>`;
+                      <div class="product-entry flex mb-4">
+                        <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
+                          <div class="product-info flex-grow">
+                            <h3 class="text-white font-semibold">Product Name: ${productName}</h3>
+                            <p class="text-green-400 mt-2 mb-2">
+                              <span class="text-white">MRP of One Piece:</span> ₹ ${price}
+                            </p>
+                            <input type="number" value="${quantity}" min="1"
+                              class="text-white placeholder:text-white bg-green-600 px-4 py-1 rounded cursor-pointer w-16 quantity">
+                            <a href="/feed/addToCart/show/${productName}">
+                              <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button>
+                            </a>
+                          </div>
+                          <div class="img-container flex-shrink-0 w-full md:h-[150px] md:w-[150px]" >
+                            <img src="${url}" alt="${productName} Image" class="rounded w-full h-full object-cover">
+                          </div>
+                        </div>
+                      </div>
+                      `;
         document.querySelector('.product-list').innerHTML += item;
       }
 
@@ -369,7 +419,7 @@
         axios.get('/feed/addToCart/show')
           .then(response => {
             const cartItems = response.data;
-            cartItems.forEach(item => {
+            cartItems.forEach((item,idx)=> {
               cost += item.price;
               addToCart(item.price, item.productImg, item.productName, item.quantity);
             });
@@ -390,7 +440,6 @@
         document.getElementById('loader').classList.add('hidden');
         document.getElementById('loader-background').classList.add('hidden');
       });
-
     });
 
   </script>

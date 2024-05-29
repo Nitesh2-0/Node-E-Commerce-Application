@@ -7,6 +7,7 @@ const auth = require('../passport-auth');
 const upload = require('./multer')
 const productModel = require('../models/products')
 const addToCartModel = require('../models/addToCart');
+const { route } = require('../routes/razorpay');
 passport.use(new localStategy(userModel.authenticate()));
 
 /* GET Login Page. */
@@ -72,7 +73,8 @@ router.get('/feed', auth, async (req, res) => {
     if (!data) {
       return res.redirect('/register');
     }
-    res.render('feed', { userFeedData })
+    const allProducts = await productModel.find();
+    res.render('feed', { userFeedData , allProducts})
   } catch (error) {
     res.redirect('/register');
   }
@@ -142,7 +144,7 @@ router.get('/feed/addToCart/show/:name', auth, async (req, res) => {
 })
 
 /* POST Add Product - Seller */
-router.post('/sellerProfile/Create-Product', upload.array('images'), async (req, res) => {
+router.post('/sellerProfile/Create-Product', upload.array('images'), auth , async (req, res) => {
   try {
     const { productName, stock, offer, productPrice,descpt } = req.body;
     const newProduct = new productModel({
@@ -162,5 +164,17 @@ router.post('/sellerProfile/Create-Product', upload.array('images'), async (req,
     res.redirect('/sellerProfile')
   }
 });
+
+/* GET Delete Product - Seller */
+router.get('/sellerProfile/delete/:id', auth , async (req,res) => {
+  try {
+    const {id} = req.params
+    const deletedProduct = await productModel.findOneAndDelete({_id:id}); 
+    console.log(deletedProduct);
+    res.status(200).json({success:true, message:'Product Deleted Successfully.'})
+  } catch (error) {
+    res.status(500).json({success:false , message:'Internal Server Error'})
+  }
+})
 
 module.exports = router;

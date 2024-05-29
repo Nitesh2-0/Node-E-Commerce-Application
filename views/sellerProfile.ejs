@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seller Dashboard</title>
-  <link rel="shortcut icon" href="/images/assets/log2.png" type="image/x-icon">
+  <link rel="shortcut icon" href="/images/assets/E-store (1).png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     #scroller-x::-webkit-scrollbar {
@@ -139,36 +139,41 @@
   <div class="h-screen overflow-y-auto mt-16 flex flex-wrap gap-5 justify-center py-2 px-2" id="scroller-x">
     <% if(products.length==0){ %>
       <h1 class="text-red-500 font-bold text-3xl">No Such Product Created By You</h1>
-    <% }else{ %>
-      <% products.forEach(product=> { %>
-        <div class="max-w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden" style="width: 24rem; height: 32rem;">
-          <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
-            <% product.images.forEach(image=> { %>
-              <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full" style="object-position: top;">
-            <% }) %>
+      <% }else{ %>
+        <% products.forEach(product=> { %>
+          <div
+            class="max-w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden"
+            style="width: 24rem; height: 32rem;">
+            <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
+              <% product.images.forEach(image=> { %>
+                <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
+                  style="object-position: top;">
+                <% }) %>
+            </div>
+            <div class="p-4">
+              <div class="max-h-8 overflow-x-auto py-1 rounded-md" id="scroller-x">
+                <p class="text-gray-600 font-bold" id="scroller-x">
+                  <%= product.productName %>
+                </p>
+              </div>
+              <h1 class="text-lg text-gray-600 font-medium">Price: <span class="text-red-500">₹ <%= product.productPrice
+                    %></span></h1>
+              <div class="max-h-12 overflow-y-auto py-1 rounded-md" id="scroller-x">
+                <p class="text-gray-600">
+                  <%= product.descpt %>
+                </p>
+              </div>
+              <div class="flex justify-between mt-4">
+                <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white" id="deleteProduct"
+                  productId="<%= product._id %>">Remove</button>
+                <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
+              </div>
+            </div>
           </div>
-          <div class="p-4">
-            <div class="max-h-8 overflow-x-auto py-1 rounded-md" id="scroller-x">
-              <p class="text-gray-600 font-bold" id="scroller-x">
-                <%= product.productName %>
-              </p>
-            </div>
-            <h1 class="text-lg text-gray-600 font-medium">Price: <span class="text-red-500">₹ <%= product.productPrice %></span></h1>
-            <div class="max-h-12 overflow-y-auto py-1 rounded-md" id="scroller-x">
-              <p class="text-gray-600">
-                <%= product.descpt %>
-              </p>
-            </div>
-            <div class="flex justify-between mt-4">
-              <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white">Remove</button>
-              <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
-            </div>
-          </div>
-        </div>
-      <% }) %>
-    <% } %>
+          <% }) %>
+            <% } %>
   </div>
-  
+
 
   <hr>
   <footer class="footer">
@@ -180,6 +185,7 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
 
     function cancelForm() {
@@ -202,6 +208,21 @@
       var form = document.getElementById("status");
       form.classList.toggle("hidden");
     }
+
+    const deleteProduct = document.querySelectorAll('#deleteProduct')
+    deleteProduct.forEach((product) => {
+      product.addEventListener('click', async () => {
+        const getId = product.getAttribute('productId')
+        console.log('deleted', getId);
+        try {
+          const { data } = await axios.get(`/sellerProfile/delete/${getId}`)
+          window.location.reload()
+        } catch (error) {
+          console.log(error);
+          alert('Something is Wrong.')
+        }
+      })
+    })
 
 
   </script>
