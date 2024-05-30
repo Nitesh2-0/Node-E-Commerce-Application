@@ -144,3 +144,47 @@ select{
     width: 40%;
   }
 }
+
+/* Loader */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #3490dc;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 1s linear infinite;
+  z-index: 100;
+}
+
+.loader-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.7;
+  z-index: 99;
+}
+
+.hidden {
+  display: none;
+}
+
+#scrollBar::-webkit-scrollbar {
+  display: none;
+}

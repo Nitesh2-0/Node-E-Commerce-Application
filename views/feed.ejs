@@ -12,51 +12,6 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
-<style>
-  /* Loader */
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  .loader {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #3490dc;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: spin 1s linear infinite;
-    z-index: 100;
-  }
-
-  .loader-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    opacity: 0.7;
-    z-index: 99;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  #scrollBar::-webkit-scrollbar {
-    display: none;
-  }
-</style>
 
 <body class="bg-slate-700">
   <div id="loader-background" class="loader-background"></div>
@@ -67,7 +22,8 @@
       <div class="flex justify-between items-center p-2">
         <!-- Logo -->
         <div class="flex-shrink-0 flex items-center hidden md:block">
-          <a href="/feed" class="text-white text-2xl hidden md:block font-bold h-auto w-[8rem] overflow-hidden rounded"><img
+          <a href="/feed"
+            class="text-white text-2xl hidden md:block font-bold h-auto w-[8rem] overflow-hidden rounded"><img
               src="/images/assets/E-store (1).png" alt="" class=" rounded"></a>
         </div>
 
@@ -92,8 +48,10 @@
             id="addOption">
             <option>All</option>
             <% allProducts.forEach(product=> { %>
-            <option value="<%= product.productName %>"><%= product.productName %></option>
-            <% }) %>
+              <option value="<%= product.productName %>">
+                <%= product.productName %>
+              </option>
+              <% }) %>
           </select>
           <input type="text" placeholder="Search Products"
             class="px-3 w-[100%] py-2 w-64 bg-slate-700 text-white rounded-r focus:outline-none placeholder-gray-400">
@@ -123,27 +81,63 @@
                 </p>
               </div>
             </button>
+          </div>
+        </div>
 
+        <!-- Profile Section -->
+        <div class="fixed hidden right-0 top-0 w-96 bg-gray-900 h-screen transition-opacity duration-500"
+          id="profileSection">
 
-            <!-- Profile dropdown -->
-            <div id="profile-dropdown"
-              class="hidden mt-2 w-48 bg-gray-800 rounded shadow-lg overflow-hidden z-10 absolute right-1 md:right-2">
-              <div class="py-1">
-                <div class="w-full h-auto p-2 relative bg-gray-600 flex flex-col justify-center items-center rounded">
-                  <img src="<%= userFeedData.img %>" alt="" class="h-16 w-16 rounded-full border-2 border-gray-400"
-                    id="profileImag">
-                  <a href="/feed" class="absolute hidden" id="profileImgEditor"><i class="ri-edit-2-fill "></i></a>
-                </div>
-                <div class="block px-4 py-2 text-sm text-gray-200">Name : Nitesh Kumar</div>
-                <div class="block px-4 py-2 text-sm text-gray-200">Country : India </div>
-                <div class="block px-4 py-2 text-sm text-gray-200">User Type : Buyer</div>
-                <div class="flex justify-center items-center gap-10">
-                  <a href="/logout"><button class="text-red-700 bg-slate-700 p-1 px-2 rounded-md"
-                      id="logout-btn">Logout</button></a>
-                  <button class="text-blue-700 bg-slate-700 p-1 px-2 rounded-md" id="logout-btn">Update</button>
-                </div>
-              </div>
+          <div class="w-full h-auto">
+            <i class="ri-close-line absolute text-white left-2 top-2 cursor-pointer bg-gray-700 rounded px-2"
+              id="profileCloser"></i>
+            <div class="w-full pb-12 h-auto bg-gray-700 text-gray-100 pt-12 flex flex-col justify-center items-center">
+              <img src="<%= userFeedData.img %>" alt="" class="h-20 w-20 rounded-full border-2 border-gray-400"
+                id="profileImag">
             </div>
+          </div>
+          <hr>
+          <div class="w-full h-auto text-gray-100  p-4 px-4 ">
+            <div class="mb-2">
+              <p><strong>Full Name:</strong>
+                <%= user.fullName %>
+              </p>
+            </div>
+
+            <div class="mb-2">
+              <p><strong>Gender :</strong>
+                <%= user. sex %>
+              </p>
+            </div>
+
+            <div class="mb-2">
+              <p><strong>Email:</strong>
+                <%= user.email %>
+              </p>
+            </div>
+
+            <div class="mb-2">
+              <p><strong>Phone Number : </strong>
+                <%= user.CountryCode %>
+                  <%= user. phone %>
+              </p>
+            </div>
+
+            <div class="mb-2">
+              <p><strong>Address:</strong>
+                <%= user.Locality %>
+                  <%= user.State %>
+                    <%= user.Zip %>
+                      <%= user.Country %>
+              </p>
+            </div>
+          </div>
+          <hr>
+          <div class="m-2 absolute w-full bottom-0  gap-2">
+            <a href="/logout"><button class="text-gray-100 bg-red-600 p-1 px-2 rounded-md"
+                id="logout-btn">Logout</button></a>
+            <a href="/feed/user/<%= user._id %>"><button class="text-gray-100 bg-green-600 p-1 px-2 rounded-md"
+                id="logout-btn">Update</button></a>
           </div>
         </div>
 
@@ -157,11 +151,14 @@
   </nav>
 
   <div class="w-full h-auto ">
-    <div
-      class="mostFrequent w-full mt-20 bg-gray-800 flex flex-grow-0 gap-10 items-center p-3 px-7 shadow-slate-700">
+    <div class="mostFrequent w-full mt-20 bg-gray-800 flex flex-grow-0 gap-10 items-center p-3 px-7 shadow-slate-700">
       <% allProducts.forEach(product=> { %>
-        <a href="#" class="optionTag decoration-0 bg-gray-700 px-2 py-1 rounded" id=${idx}><p class="text-white font-awesome text-xs font-semibold"><%= product.productName.toUpperCase().trim() %></p></a>
-      <% }) %>
+        <a href="#" class="optionTag decoration-0 bg-gray-700 px-2 py-1 rounded" id=${idx}>
+          <p class="text-white font-awesome text-xs font-semibold">
+            <%= product.productName.toUpperCase().trim() %>
+          </p>
+        </a>
+        <% }) %>
     </div>
     <!-- Swiper -->
     <div class="swiper mySwiper w-full bg-gray-700 hidden md:flex">
@@ -419,7 +416,7 @@
         axios.get('/feed/addToCart/show')
           .then(response => {
             const cartItems = response.data;
-            cartItems.forEach((item,idx)=> {
+            cartItems.forEach((item, idx) => {
               cost += item.price;
               addToCart(item.price, item.productImg, item.productName, item.quantity);
             });
@@ -440,6 +437,41 @@
         document.getElementById('loader').classList.add('hidden');
         document.getElementById('loader-background').classList.add('hidden');
       });
+
+
+      let flg = true;
+      const account = document.getElementById('profileSection');
+
+      document.getElementById('profile-btn').addEventListener('click', () => {
+        if (!flg) {
+          account.classList.remove('hidden');
+          flg = true;
+        } else {
+          account.classList.add('hidden');
+          flg = false;
+        }
+      });
+
+      document.getElementById('profileCloser').addEventListener('click', () => {
+        account.classList.add('hidden');
+      });
+
+      // const updateUser = document.getElementById('update-btn');
+      // updateUser.addEventListener('click', async () => {
+      //   const id = updateUser.getAttribute('userId');
+      //   if (id) {
+      //     try {
+      //       const response = await axios.get(`/feed/user/${id}`);
+      //       console.log(response.data); // To check if the response is coming through
+      //     } catch (error) {
+      //       console.error('Error fetching user data:', error);
+      //     }
+      //   } else {
+      //     console.error('User ID not found');
+      //   }
+      // });
+
+
     });
 
   </script>

@@ -59,28 +59,28 @@ router.get('/logout', function (req, res, next) {
   })
 })
 
-/* GET Feed Page */
-router.get('/feed', auth, async (req, res) => {
+/* GET Feed Page - User */
+router.get('/feed', async (req, res) => {
   try {
     const username = req.user.username;
-    const data = await userModel.findOne({ username });
-    const name = data.fullName.split(' ')[0];
+    const user = await userModel.findOne({ username });
+    const name = user.fullName.split(' ')[0];
     const userFeedData = {
-      location: data.State + " " + data.Zip,
+      location: user.State + " " + user.Zip,
       name: name,
-      img: data.profileImg,
+      img: user.profileImg,
     }
-    if (!data) {
+    if (!user) {
       return res.redirect('/register');
     }
     const allProducts = await productModel.find();
-    res.render('feed', { userFeedData , allProducts})
+    res.render('feed', { user,userFeedData , allProducts})
   } catch (error) {
     res.redirect('/register');
   }
 });
 
-/* GET sellerProfile Page */
+/* GET sellerProfile Page - Seller */
 router.get('/sellerProfile', auth, async (req, res) => {
   try {
     const username = req.user.username;
@@ -97,10 +97,10 @@ router.get('/sellerProfile', auth, async (req, res) => {
   }
 });
 
-/* POST Razorpay Payment  */
+/* POST Razorpay Payment - User  */
 router.post('/createOrder', auth, require('../routes/razorpay'));
 
-/* POST AddToCart Iteam */
+/* POST AddToCart Iteam - Seller */
 router.post('/feed/addToCart', auth, async (req, res) => {
   try {
     const { productName, price, productImg } = req.body
@@ -120,7 +120,7 @@ router.post('/feed/addToCart', auth, async (req, res) => {
   }
 })
 
-/* GET AddToCaet Item  */
+/* GET AddToCaet Item - User */
 router.get('/feed/addToCart/show', auth, async (req, res) => {
   try {
     const cartProduct = await addToCartModel.find({ username: req.user.username })
@@ -131,7 +131,7 @@ router.get('/feed/addToCart/show', auth, async (req, res) => {
   }
 })
 
-/* POST Delete Cart Items */
+/* POST Delete Cart Items - Seller */
 router.get('/feed/addToCart/show/:name', auth, async (req, res) => {
   try {
     await addToCartModel.findOneAndDelete({ username: req.user.username, productName: req.params.name })
@@ -176,5 +176,44 @@ router.get('/sellerProfile/delete/:id', auth , async (req,res) => {
     res.status(500).json({success:false , message:'Internal Server Error'})
   }
 })
+
+/* GET Update Profile - User */
+router.get('/feed/user/:id', async (req, res) => {
+  try {
+    const user = await userModel.findOne({ _id: req.params.id });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    res.render('update', { user });
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+/* POST Update Profile - User */
+router.post('/feed/updated/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updates = req.body;
+
+    const existingUser = await userModel.findById(id);
+    if (!existingUser) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+
+    Object.keys(updates).forEach((key) => {
+      if (updates[key] !== null && updates[key] !== undefined && updates[key] !== '') {
+        existingUser[key] = updates[key];
+      }
+    });
+
+    const updatedUser = await existingUser.save();
+    res.redirect('/feed')
+  } catch (error) {
+    res.status(500).send({ error: 'An error occurred while updating the user data' });
+  }
+});
+
 
 module.exports = router;

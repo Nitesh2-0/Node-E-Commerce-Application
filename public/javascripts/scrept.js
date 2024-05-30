@@ -12,7 +12,7 @@ logoutBtn.addEventListener("click", () => console.log("Logged out"));
 
 function toggleProfileDropdown(event) {
   isProfileVisible = !isProfileVisible;
-  profileDropdown.style.display = isProfileVisible ? 'block' : 'none';
+  // profileDropdown.style.display = isProfileVisible ? 'block' : 'none';
 }
 
 const productAvilable = document.getElementById("productAvilable");
