@@ -25,6 +25,7 @@ This application integrates with Razorpay to handle online payments.
 - Add products to the cart.
 - Remove items from the cart.
 - Complete purchases online.
+- Profile Update
 
 ### Seller Features
 - Create and delete product.
