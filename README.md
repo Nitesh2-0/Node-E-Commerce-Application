@@ -41,5 +41,4 @@ This application integrates with Razorpay to handle online payments.
 ```javascript
 npm install
 ```
-
   
