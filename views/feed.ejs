@@ -92,7 +92,7 @@
             <i class="ri-close-line absolute text-white left-2 top-2 cursor-pointer bg-gray-700 rounded px-2"
               id="profileCloser"></i>
             <div class="w-full pb-12 h-auto bg-gray-700 text-gray-100 pt-12 flex flex-col justify-center items-center">
-              <img src="<%= userFeedData.img %>" alt="" class="h-20 w-20 rounded-full border-2 border-gray-400"
+              <img src="<%= userFeedData.img %>" alt="" class="h-24 w-24 rounded-full border-2 border-gray-400"
                 id="profileImag">
             </div>
           </div>
@@ -137,7 +137,9 @@
             <a href="/logout"><button class="text-gray-100 bg-red-600 p-1 px-2 rounded-md"
                 id="logout-btn">Logout</button></a>
             <a href="/feed/user/<%= user._id %>"><button class="text-gray-100 bg-green-600 p-1 px-2 rounded-md"
-                id="logout-btn">Update</button></a>
+                id="logout-btn">Update Profile</button></a>
+            <a href="/sellerProfile"><button class="text-gray-100 bg-yellow-600 p-1 px-2 rounded-md"
+                id="logout-btn">Sell Product</button></a>
           </div>
         </div>
 
@@ -191,7 +193,7 @@
         class="w-full md:max-w-[20rem] md:max-h-[32rem] shadow-md bg-gray-800 hover:bg-gray-900  border border-gray-700 rounded-lg overflow-hidden cartFrame">
         <div class="flex overflow-x-auto w-full h-80 w-full" id="scrollBar">
           <% product.images.forEach(image=> { %>
-            <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
+            <img src="/<%= image %>" alt="<%= product.productName %>" class=" w-full h-full"
               style="object-position: top;">
             <% }) %>
         </div>

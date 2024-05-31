@@ -11,7 +11,7 @@
 
 <body class="bg-gray-100 p-2">
     <div class="container mx-auto mt-8">
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/update/<%= user._id %>" method="POST">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/feed/updated/<%= user._id %>" method="POST" enctype="multipart/form-data">
             <h2 class="text-center text-2xl text-gray-800 mb-4">Update Profile</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="fullName">Full Name</label>
@@ -19,21 +19,20 @@
                     placeholder="Enter your full name" value="<%= user.fullName %>" required>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="address">Address</label>
-                <input type="text" class="form-input border-2 p-2 rounded" name="address" id="address"
+                <input type="text" class="form-input border-2 p-2 rounded" name="Locality" id="address"
                     placeholder="Locality/House/Street no." value="<%= user.Locality %>" required>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="state">State</label>
-                <input type="text" class="form-input border-2 p-2 rounded" name="state" id="state"
+                <input type="text" class="form-input border-2 p-2 rounded" name="State" id="state"
                     placeholder="Enter your state name" value="<%= user.State %>" required>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="zip">Postal Code</label>
-                <input type="text" class="form-input border-2 p-2 rounded" name="zip" id="zip"
+                <input type="text" class="form-input border-2 p-2 rounded" name="Zip" id="zip"
                     placeholder="Postal Code" value="<%= user.Zip %>" required>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Country</label>
-                <select class="form-select border-2 p-2 rounded" name="country">
+                <select class="form-select border-2 p-2 rounded" name="Country">
                     <option value="India" <%= user.country === 'India' ? 'selected' : '' %>>India</option>
-                    <!-- Add more options for other countries if needed -->
                 </select>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="phoneNumber">Phone Number</label>
@@ -41,11 +40,14 @@
                     placeholder="Enter your phone number" value="<%= user.phone %>" required>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">Gender</label>
-                <select id="gender" name="gender" class="form-select border-2 p-2 rounded">
+                <select id="gender" name="sex" class="form-select border-2 p-2 rounded">
                     <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>Male</option>
                     <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>Female</option>
                     <option value="Other" <%= user.gender === 'Other' ? 'selected' : '' %>>Other</option>
                 </select>
+
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Profile Image</label>
+                <input type="file" id="image" name="profileImg" accept="image/*" class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">                
             </div>
             <div class="flex justify-between mt-4">
                 <button class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Update Now</button>
