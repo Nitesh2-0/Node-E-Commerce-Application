@@ -12,7 +12,6 @@ logoutBtn.addEventListener("click", () => console.log("Logged out"));
 
 function toggleProfileDropdown(event) {
   isProfileVisible = !isProfileVisible;
-  // profileDropdown.style.display = isProfileVisible ? 'block' : 'none';
 }
 
 const productAvilable = document.getElementById("productAvilable");
@@ -43,4 +42,50 @@ var swiper = new Swiper(".swiper", {
     el: ".swiper-pagination",
     clickable: true,
   },
+});
+
+/* Razorpay-Request */
+$(document).ready(() => {
+  $('.pay-form').submit(function (e) {
+    e.preventDefault();
+    const formData = $(this).serialize();
+    $.ajax({
+      url: '/createOrder',
+      type: 'POST',
+      data: formData,
+      success: function (res) {
+        if (res.success) {
+          const options = {
+            "key": res.key_id,
+            "amount": res.amount,
+            "currency": "INR",
+            "name": res.product_name,
+            "image": "https://plus.unsplash.com/premium_photo-1678187782578-70b5a348f502?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "order_id": res.order_id,
+            "handler": function (response) {
+              alert('Payment Successful');
+            },
+            "prefill": {
+              "contact": res.contact,
+              "name": res.name,
+              "email": res.email
+            },
+            "notes": {
+              "description": res.description
+            },
+            "theme": {
+              "color": "#2300a3"
+            }
+          };
+          const razorpayObject = new Razorpay(options);
+          razorpayObject.on('payment.failed', function (response) {
+            alert('Payment Failed');
+          });
+          razorpayObject.open();
+        } else {
+          alert(res.msg);
+        }
+      }
+    });
+  });
 });

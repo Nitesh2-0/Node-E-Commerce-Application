@@ -193,8 +193,8 @@
         class="w-full md:max-w-[20rem] md:max-h-[32rem] shadow-md bg-gray-800 hover:bg-gray-900  border border-gray-700 rounded-lg overflow-hidden cartFrame">
         <div class="flex overflow-x-auto w-full h-80 w-full" id="scrollBar">
           <% product.images.forEach(image=> { %>
-            <img src="/<%= image %>" alt="<%= product.productName %>" class=" w-full h-full"
-              style="object-position: top;">
+            <img src="/<%= image %>" alt="<%= product.productName %>" class="productImg w-full h-full"
+              style="object-position: top;" productId="<%= product._id %>">
             <% }) %>
         </div>
         <div class="p-4">
@@ -308,51 +308,6 @@
 
       const addOption = document.getElementById('addOption');
 
-      /* Razorpay-Request */
-      $(document).ready(() => {
-        $('.pay-form').submit(function (e) {
-          e.preventDefault();
-          const formData = $(this).serialize();
-          $.ajax({
-            url: '/createOrder',
-            type: 'POST',
-            data: formData,
-            success: function (res) {
-              if (res.success) {
-                const options = {
-                  "key": res.key_id,
-                  "amount": res.amount,
-                  "currency": "INR",
-                  "name": res.product_name,
-                  "image": "https://plus.unsplash.com/premium_photo-1678187782578-70b5a348f502?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                  "order_id": res.order_id,
-                  "handler": function (response) {
-                    alert('Payment Successful');
-                  },
-                  "prefill": {
-                    "contact": res.contact,
-                    "name": res.name,
-                    "email": res.email
-                  },
-                  "notes": {
-                    "description": res.description
-                  },
-                  "theme": {
-                    "color": "#2300a3"
-                  }
-                };
-                const razorpayObject = new Razorpay(options);
-                razorpayObject.on('payment.failed', function (response) {
-                  alert('Payment Failed');
-                });
-                razorpayObject.open();
-              } else {
-                alert(res.msg);
-              }
-            }
-          });
-        });
-      });
 
       /* Dynamically Add Products */
       function addToCart(price, url, productName, quantity) {
@@ -458,21 +413,18 @@
         account.classList.add('hidden');
       });
 
-      // const updateUser = document.getElementById('update-btn');
-      // updateUser.addEventListener('click', async () => {
-      //   const id = updateUser.getAttribute('userId');
-      //   if (id) {
-      //     try {
-      //       const response = await axios.get(`/feed/user/${id}`);
-      //       console.log(response.data); // To check if the response is coming through
-      //     } catch (error) {
-      //       console.error('Error fetching user data:', error);
-      //     }
-      //   } else {
-      //     console.error('User ID not found');
-      //   }
-      // });
-
+      document.querySelectorAll('.productImg').forEach((elm) => {
+        elm.addEventListener('click', async () => {
+          const productId = elm.getAttribute('productId');
+          console.log('Img Clicked', productId);
+          try {
+            window.location.href = `/feed/cart/${productId}`;
+            console.log('Response:', response.data); 
+          } catch (error) {
+            console.log('Error:', error);
+          }
+        });
+      });
 
     });
 

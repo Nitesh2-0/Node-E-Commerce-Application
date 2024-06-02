@@ -12,7 +12,7 @@ passport.use(new localStategy(userModel.authenticate()));
 
 /* GET Login Page. */
 router.get('/', function (req, res, next) {
-  // res.redirect('/sellerProfile')
+  // res.redirect('/cart')
   res.render('login')
 });
 
@@ -239,6 +239,20 @@ router.post('/feed/updated/:id', uploadSingle.single('profileImg') , auth , asyn
     res.redirect('/');
   }
 });
+
+/* GET Open Cart - User */
+router.get('/feed/cart/:id', auth , async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await productModel.findOne({_id:productId})
+    res.render('openCart', {product}); 
+  } catch (error) {
+    console.error('Error:', error);
+    res.redirect('/')
+  }
+});
+
+module.exports = router;
 
 
 module.exports = router;
