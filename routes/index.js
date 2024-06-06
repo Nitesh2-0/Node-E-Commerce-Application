@@ -252,7 +252,32 @@ router.get('/feed/cart/:id', auth , async (req, res) => {
   }
 });
 
-module.exports = router;
+/* POST REGEX-Request | Search -  User */
+router.post('/feed/item/searching', auth, async (req, res) => {
+  const searchString = req.body.searchString;
+  console.log('Search String:', searchString);
+
+  if (!searchString) {
+    return res.status(400).json({ message: 'searchString is required' });
+  }
+
+  try {
+    const regex = new RegExp(searchString, 'i'); 
+    const searchResults = await Item.find({ name: { $regex: regex } });
+    console.log('Search Results:', searchResults);
+
+    res.json({
+      results: searchResults
+    });
+  } catch (error) {
+    console.error('Error during search:', error);
+    res.status(500).json({
+      message: 'An error occurred while searching for items',
+      error: error.message
+    });
+  }
+});
+
 
 
 module.exports = router;

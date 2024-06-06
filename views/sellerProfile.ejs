@@ -19,7 +19,7 @@
     <div class="container mx-auto flex justify-between items-center p-4 px-8">
       <a href="/sellerProfile" class="text-blue-700 font-bold text-xl">Dashboard</a>
       <ul class="hidden lg:flex items-center space-x-4 text-gray-900 cursor-pointer">
-        <li>Home</li>
+        <a href="/sellerProfile"><li>Home</li></a>
         <li onclick="openForm()">Create-Product</li>
         <li onclick="openStatusSection()">Order-Status</li>
       </ul>
@@ -52,7 +52,7 @@
         </button>
       </div>
       <ul class="space-y-4 block text-gray-800">
-        <li onclick="toggleMobileMenu()">Home</li>
+        <a href="/sellerProfile"><li>Home</li></a>
         <li onclick="openForm()">Create-Product</li>
         <li onclick="openStatusSection()">Order-Status</li>
       </ul>
@@ -138,12 +138,12 @@
 
   <div class="h-screen overflow-y-auto mt-16 flex flex-wrap gap-5 justify-center py-2 px-2" id="scroller-x">
     <% if(products.length==0){ %>
-      <h1 class="text-red-500 font-bold text-3xl">No Such Product Created By You</h1>
+      <h1 class="text-red-500 font-bold text-xl">No Such Product Created By You</h1>
       <% }else{ %>
         <% products.forEach(product=> { %>
           <div
-            class="max-w-96 md:w-80 shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden"
-            style="width: 24rem; height: 32rem;">
+            class="max-w-[24rem] md:w-96 max-h-[33rem] shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden"
+            >
             <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
               <% product.images.forEach(image=> { %>
                 <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
@@ -156,9 +156,19 @@
                   <%= product.productName %>
                 </p>
               </div>
-              <h1 class="text-lg text-gray-600 font-medium">Price: <span class="text-red-500">₹ <%= product.productPrice
-                    %></span></h1>
-              <div class="max-h-12 overflow-y-auto py-1 rounded-md" id="scroller-x">
+              <% let originalPrice = Math.round(product.productPrice - (product.productPrice * (product.offer / 100))); %>
+              <div class="w-full md:flex md:items-center gap-5 mb-1">
+                <% if (product.offer) { %>
+                    <p class="text-xl font-semibold">Price: ₹ <%= originalPrice %> <span class="line-through text-gray-500">₹
+                          <%= product.productPrice %></span></p>
+        
+                    <% } else { %>
+                      <p class="text-xl font-semibold">Price: ₹ <%= product.productPrice %>
+                      </p>
+                      <% } %>
+                        <p class="text-red-500 text-xl font-semibold">(<%= product.offer %>% Off)</p>
+              </div>
+              <div class="max-h-8 overflow-y-auto py-1 rounded-md" id="scroller-x">
                 <p class="text-gray-600">
                   <%= product.descpt %>
                 </p>

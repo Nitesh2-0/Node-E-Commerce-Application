@@ -32,7 +32,7 @@
       <p class="text-gray-600 text-lg mb-4">
         <%= product.descpt %>
       </p>
-      <% let originalPrice = product.productPrice - (product.productPrice * (product.offer / 100)); %>
+      <% let originalPrice = Math.round(product.productPrice - (product.productPrice * (product.offer / 100))); %>
       <div class="w-full md:flex md:items-center gap-5 mb-5">
         <% if (product.offer) { %>
             <p class="text-xl font-semibold">Price: ₹ <%= originalPrice %> <span class="line-through text-gray-500">₹
