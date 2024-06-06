@@ -30,18 +30,18 @@ router.get('/register', (req, res, next) => {
 /* POST Register Page | Error -> Bad Request - Due to Username is not mension in the register form */
 router.post('/register', async function (req, res) {
   try {
-    const { fname, password, email, phone, Locality, State, Zip, sex, Country, CountryCode } = req.body;
+    const { fname, username, phone, Locality, State, Zip, sex, Country, CountryCode } = req.body;
 
-    const existingUser = await userModel.findOne({ username: email });
+    const existingUser = await userModel.findOne({ username });
     if (existingUser) {
       return res.render('register', { message: 'Email already exists' });
     }
     const fullName = fname;
-    const userData = new userModel({ username: email, fullName, email, phone, Locality, State, Zip, sex, Country, CountryCode });
+    const userData = new userModel({ username , fullName, email:username, phone, Locality, State, Zip, sex, Country, CountryCode });
 
     userModel.register(userData, req.body.password).then(function (registerUser) {
       passport.authenticate('local')(req, res, function () {
-        res.redirect('/');
+        res.redirect('/feed');
       })
     })
 
