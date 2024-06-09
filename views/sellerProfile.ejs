@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seller Dashboard | <%= name %></title>
+  <title>Seller Dashboard | <%= name %>
+  </title>
+  <link rel="stylesheet" href="/public/stylesheets/style.css">
   <link rel="shortcut icon" href="/images/assets/E-store (1).png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
@@ -15,17 +17,23 @@
 </head>
 
 <body>
+
+  <div id="loader-background" class="loader-background"></div>
+  <div id="loader" class="loader"></div>
+
   <nav class="bg-white fixed top-0 w-full z-10 shadow">
     <div class="container mx-auto flex justify-between items-center p-4 px-8">
       <a href="/sellerProfile" class="text-blue-700 font-bold text-xl">Dashboard</a>
       <ul class="hidden lg:flex items-center space-x-4 text-gray-900 cursor-pointer">
-        <a href="/sellerProfile"><li>Home</li></a>
+        <a href="/sellerProfile">
+          <li>Home</li>
+        </a>
         <li onclick="openForm()">Create-Product</li>
         <li onclick="openStatusSection()">Order-Status</li>
       </ul>
       <div class="flex items-center">
         <img src="<%= seller.profileImg %>" alt="Profile Image"
-          class="w-8 h-8 rounded-full object-cover mr-2 border cursor-pointer">
+          class="w-8 h-8 rounded-full object-cover mr-2 border cursor-pointer" id="profile-btn">
         <span class="text-gray-700">
           <%= seller.sellerName %>
         </span>
@@ -52,7 +60,9 @@
         </button>
       </div>
       <ul class="space-y-4 block text-gray-800">
-        <a href="/sellerProfile"><li>Home</li></a>
+        <a href="/sellerProfile">
+          <li>Home</li>
+        </a>
         <li onclick="openForm()">Create-Product</li>
         <li onclick="openStatusSection()">Order-Status</li>
       </ul>
@@ -142,60 +152,63 @@
       <% }else{ %>
         <% products.forEach(product=> { %>
           <div
-            class="max-w-[24rem] md:w-96 max-h-[33rem] shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden"
-            >
-            <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
-              <% product.images.forEach(image=> { %>
-                <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
-                  style="object-position: top;">
-                <% }) %>
-            </div>
+            class="max-w-[24rem] md:w-96 max-h-[33rem] shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
+            <a href="/feed/cart/<%= product._id %>">
+              <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
+                <% product.images.forEach(image=> { %>
+                  <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
+                    style="object-position: top;">
+                  <% }) %>
+              </div>
+            </a>
             <div class="p-4">
               <div class="max-h-8 overflow-x-auto py-1 rounded-md" id="scroller-x">
                 <p class="text-gray-600 font-bold" id="scroller-x">
                   <%= product.productName %>
                 </p>
               </div>
-              <% let originalPrice = Math.round(product.productPrice - (product.productPrice * (product.offer / 100))); %>
-              <div class="w-full md:flex md:items-center gap-5 mb-1">
-                <% if (product.offer) { %>
-                    <p class="text-xl font-semibold">Price: ₹ <%= originalPrice %> <span class="line-through text-gray-500">₹
-                          <%= product.productPrice %></span></p>
-        
+              <% let originalPrice=Math.round(product.productPrice - (product.productPrice * (product.offer / 100))); %>
+                <div class="w-full md:flex md:items-center gap-5 mb-1">
+                  <% if (product.offer) { %>
+                    <p class="text-xl font-semibold">Price: ₹ <%= originalPrice %> <span
+                          class="line-through text-gray-500">₹
+                          <%= product.productPrice %>
+                        </span></p>
+
                     <% } else { %>
                       <p class="text-xl font-semibold">Price: ₹ <%= product.productPrice %>
                       </p>
                       <% } %>
                         <p class="text-red-500 text-xl font-semibold">(<%= product.offer %>% Off)</p>
-              </div>
-              <div class="max-h-8 overflow-y-auto py-1 rounded-md" id="scroller-x">
-                <p class="text-gray-600">
-                  <%= product.descpt %>
-                </p>
-              </div>
-              <div class="flex justify-between mt-4">
-                <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white" id="deleteProduct"
-                  productId="<%= product._id %>">Remove</button>
-                <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
-              </div>
+                </div>
+                <div class="max-h-8 overflow-y-auto py-1 rounded-md" id="scroller-x">
+                  <p class="text-gray-600">
+                    <%= product.descpt %>
+                  </p>
+                </div>
+                <div class="flex justify-between mt-4">
+                  <button class="bg-red-500 hover:bg-red-600 py-2 px-4 rounded-md text-white" id="deleteProduct"
+                    productId="<%= product._id %>">Remove</button>
+                  <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white">Edit</button>
+                </div>
             </div>
           </div>
           <% }) %>
             <% } %>
   </div>
 
-
   <hr>
   <footer class="footer">
     <div class="container mx-auto py-8 px-4">
       <div class="flex justify-between items-center">
-        <p class="text-sm text-gray-600">© 2024 POPPOM Store. All rights reserved.</p>
+        <p class="text-sm text-gray-600">© 2024 E-STORE. All rights reserved.</p>
         <p class="text-sm text-gray-600">Contact us: pompom123@gmail.com</p>
       </div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/javascripts/scrept.js"></script>
   <script>
 
     function cancelForm() {

@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>E-STORE A-Z Store Online</title>
+  <title>E-STORE Online | <%= userFeedData.name %>
+  </title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="shortcut icon" href="/images/assets/E-store (1).png" type="image/x-icon">
@@ -44,25 +45,20 @@
 
         <!-- Search Input -->
         <div class="hidden md:flex bg-slate-700 rounded-lg text-white items-center overflow-hidden w-1/2">
-          <select class="search-selectv rounded-l w-16 text-white px-3 py-2 rounded-l bg-slate-700 focus:outline-none"
-            id="addOption">
-            <option>All</option>
-            <% allProducts.forEach(product=> { %>
-              <option value="<%= product.productName %>">
-                <%= product.productName %>
-              </option>
-              <% }) %>
-          </select>
-          <input type="text" placeholder="Search Products"
-            class="px-3 w-[100%] py-2 w-64 bg-slate-700 text-white rounded-r focus:outline-none placeholder-gray-400" id="serachData">
-          <div class="p-2 bg-gray-600 h-full rounded-r flex items-center">
-            <i class="ri-search-line cursor-pointer" id="serach"></i>
-          </div>
+          <p class="search-selectv rounded-l w-8 text-white px-2 py-2 rounded-l bg-slate-700 focus:outline-none">All</p>
+          <form class="w-full flex items-center" id="formSubmission">
+            <input type="text" value="" placeholder="Search Products"
+              class="px-3 w-[100%] py-2 w-64 bg-slate-700 text-white rounded-r focus:outline-none placeholder-gray-400"
+              id="searchInput" required>
+            <div class="p-2 bg-gray-600 h-full rounded-r flex items-center">
+              <button type="submit"><i class="ri-search-line cursor-pointer" id="serach"></i></button>
+            </div>
+          </form>
         </div>
 
         <!-- Shopping Cart -->
         <div class="relative" id="shopingCart">
-          <i class="ri-shopping-bag-4-fill text-white text-3xl md:text-xl border-2 border-indigo-600 p-2 rounded-full"
+          <i class="ri-shopping-bag-4-fill text-white text-xl border-2 border-indigo-600 p-2 rounded-full"
             id="showAllProductOfAddToCart">
             <div class="absolute -top-2 left-1/6 transform -translate-x-1/2 flex items-center justify-center">
               <p class="text-white bg-blue-800 px-2 py-1 rounded-full text-xs" id="productAvilable">0</p>
@@ -85,9 +81,8 @@
         </div>
 
         <!-- Profile Section -->
-        <div class="fixed hidden right-0 top-0 w-96 bg-gray-900 h-screen transition-opacity duration-500"
+        <div class="fixed hidden right-0 top-0 md:w-96 w-full bg-gray-900 h-screen transition-opacity duration-500"
           id="profileSection">
-
           <div class="w-full h-auto">
             <i class="ri-close-line absolute text-white left-2 top-2 cursor-pointer bg-gray-700 rounded px-2"
               id="profileCloser"></i>
@@ -209,9 +204,9 @@
             </p>
           </div>
           <div class="flex justify-between mt-4">
-            <% var originalPrice = Math.round(product.productPrice - (product.productPrice*product.offer/100)) %>
-            <button class="bg-green-900 px-2 rounded-md text-white price">₹ <%= originalPrice %></button>
-            <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white addBtn">Add To Cart</button>
+            <% var originalPrice=Math.round(product.productPrice - (product.productPrice*product.offer/100)) %>
+              <button class="bg-green-900 px-2 rounded-md text-white price">₹ <%= originalPrice %></button>
+              <button class="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-md text-white addBtn">Add To Cart</button>
           </div>
         </div>
       </div>
@@ -220,14 +215,14 @@
 
   <div
     class="fixed top-[7%] md:top-[10%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[90%]">
-    <h3 class="text-xl font-semibold text-gray-200 text-center mb-2">All Selected Collections</h3>
+    <h3 class="text-xl font-semibold text-gray-200 text-center p-4 ">All Selected Collections</h3>
     <div class="product-list">
     </div>
     <div class="w-full text-white bg-gray-800 p-4 mt-4">
       <h1 class="text-center mb-2">Total Amount : ₹ <span class="totalAmount">500</span></h1>
       <div class="w-full h-0.5 bg-gray-500 mb-2"></div>
       <form class="pay-form">
-        <input type="hidden" value="POMPOM A-Z Store Online" name="name">
+        <input type="hidden" value="E-STORE Online" name="name">
         <input type="hidden" value="500" name="amount" id="totals">
         <input type="hidden" value="done" name="description">
         <input type="submit" value="Pay Now"
@@ -300,9 +295,22 @@
     </div>
   </footer>
 
+  <!-- Search Item -->
+  <div
+    class="w-full md:w-[90%] hidden mt-[4rem] md:mt-20  p-4 max-h-screen  md:max-h-96 bg-gray-900 fixed z-40 top-0 left-1/2 transform -translate-x-1/2 overflow-y-auto mb-12 rounded-b " id="suggestedResult">
+    <i class="ri-close-line text-yellow-500 font-bold cursor-pointer" id="close-search"></i>
+    <p class="flex justify-center mb-4 text-white text-lg font-semibold">Suggested Result</p>
+    <hr class="border-gray-600 mb-4">
+    <div class="result-Container w-full"></div>
+    
+  </div>
+
+
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/javascripts/scrept.js"></script>
 </body>
+
 </html>

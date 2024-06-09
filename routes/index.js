@@ -27,7 +27,7 @@ router.get('/register', (req, res, next) => {
   res.render('register', { message: '' })
 })
 
-/* POST Register Page | Error -> Bad Request - Due to Username is not mension in the register form */
+/* POST Register Page */
 router.post('/register', async function (req, res) {
   try {
     const { fname, username, phone, Locality, State, Zip, sex, Country, CountryCode } = req.body;
@@ -94,7 +94,7 @@ router.get('/sellerProfile', auth, async (req, res) => {
       sellerName: authSeller.fullName.split(' ')[0]
     }
     const products = await productModel.find({ sellerId: req.user._id });
-    res.render('sellerProfile', { seller, name: req.user.fullName, products });
+    res.render('sellerProfile', { seller, authSeller, name: req.user.fullName, products });
   } catch (error) {
     console.log(error.message);
     res.redirect('feed')
@@ -253,31 +253,22 @@ router.get('/feed/cart/:id', auth , async (req, res) => {
 });
 
 /* POST REGEX-Request | Search -  User */
-router.post('/feed/item/searching', auth, async (req, res) => {
-  const searchString = req.body.searchString;
-  console.log('Search String:', searchString);
-
-  if (!searchString) {
-    return res.status(400).json({ message: 'searchString is required' });
-  }
-
+router.get('/feed/search', async (req, res) => {
+  const regexPattern = req.query.pattern;
+  const ignoreCase = req.query.ignoreCase === 'true'; 
+  const regex = new RegExp(regexPattern, ignoreCase ? 'i' : '');
   try {
-    const regex = new RegExp(searchString, 'i'); 
-    const searchResults = await Item.find({ name: { $regex: regex } });
-    console.log('Search Results:', searchResults);
-
-    res.json({
-      results: searchResults
+    const searchData = await productModel.find({
+      $or: [
+        {  productName: regex },
+        {  descpt: regex }
+      ]
     });
+    res.json(searchData);
   } catch (error) {
-    console.error('Error during search:', error);
-    res.status(500).json({
-      message: 'An error occurred while searching for items',
-      error: error.message
-    });
+    console.error('Error searching products:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
-
-
 
 module.exports = router;

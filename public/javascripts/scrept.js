@@ -92,7 +92,7 @@ $(document).ready(() => {
 
 /* Dynamically Add Products */
 function addToCart(price, url, productName, quantity, offer) {
-  const originalPrice = price - (price*(offer/100));
+  const originalPrice = price - (price * (offer / 100));
   const item = `
                 <div class="product-entry flex mb-4">
                   <div class="w-full bg-gray-800 p-4 rounded-md flex flex-wrap justify-between items-center gap-10">
@@ -107,7 +107,7 @@ function addToCart(price, url, productName, quantity, offer) {
                         <button class="remove-product-btn text-white bg-red-500 px-4 py-1 rounded cursor-pointer">Remove</button>
                       </a>
                     </div>
-                    <div class="img-container flex-shrink-0 w-full md:h-[150px] md:w-[150px]" >
+                    <div class="img-container flex-shrink-0 w-full md:h-[150px] md:w-[150px] " >
                       <img src="${url}" alt="${productName} Image" class="rounded w-full h-full object-cover">
                     </div>
                   </div>
@@ -157,7 +157,7 @@ function fetchAndDisplayCartItems() {
       const cartItems = response.data;
       cartItems.forEach((item, idx) => {
         cost += item.price;
-        addToCart(item.price, item.productImg, item.productName, item.quantity,item.offer);
+        addToCart(item.price, item.productImg, item.productName, item.quantity, item.offer);
       });
       productAvilable.textContent = `${cartItems.length}`;
     }).then(() => {
@@ -200,7 +200,7 @@ document.querySelectorAll('.productImg').forEach((elm) => {
     console.log('Img Clicked', productId);
     try {
       window.location.href = `/feed/cart/${productId}`;
-      console.log('Response:', response.data); 
+      console.log('Response:', response.data);
     } catch (error) {
       console.log('Error:', error);
     }
@@ -208,18 +208,61 @@ document.querySelectorAll('.productImg').forEach((elm) => {
 });
 
 
-const searchBtn = document.getElementById('serach'); 
-searchBtn.addEventListener('click', async (req,res) => {
-  const serchItem = document.getElementById('serachData'); 
-  const product_name = serchItem.value
+let previousSearchInput = '';
+
+document.getElementById('formSubmission').addEventListener('submit', async function (event) {
+  event.preventDefault();
+  let searchInput = document.getElementById('searchInput').value.trim(); 
+
   try {
-    axios.post('/feed/item/searching', {searchString:product_name})
-    .then((response) => {
-      const {data} = response.data;
-      console.log(data);
-    })
-    .catch((err) => console.log(err));
+    if (searchInput !== '') {
+      if (searchInput !== previousSearchInput) {
+        previousSearchInput = searchInput;
+
+        const { data } = await axios.get('/feed/search', {
+          params: {
+            pattern: searchInput,
+            ignoreCase: true
+          }
+        });
+
+        if (data.length === 0) {
+          document.querySelector('.result-Container').innerHTML = "<h1 class='text-red-500 font-bold flex item-center'>No Such Result Found!</h1>";
+        } else {
+          document.querySelector('.result-Container').innerHTML = "";
+          data.forEach(item => {
+            const searchItem = `<a href="/feed/cart/${item._id}" target="_blanck">
+              <div class="w-full flex items-center mb-4">
+                <img src="${item.images[0]}" class="w-20 h-auto mb-2 mt-2" alt="">
+                <div class="ml-4 text-white">
+                  <h3 class="text-xl font-semibold">${item. productName}</h3>
+                  <p class="mt-2">${item. descpt}</p>
+                  <div class="flex items-center gap-5">
+                    <h3 class="mt-2 text-lg font-semibold ">Price : ₹ ${Math.round(item.productPrice - (item.productPrice*item.offer/100))} &nbsp;<span class="line-through text-red-500">₹ ${item. productPrice}
+                      </span> </h3>
+                    <h3 class="text-yellow-300 font-semibold mt-2">(${item.offer}% Off)</h3>
+                  </div>
+                </div>
+              </div>
+            </a>
+            <hr class="border-gray-600">`;
+            document.querySelector('.result-Container').innerHTML += searchItem;
+          });
+        }
+      }
+      document.getElementById('suggestedResult').style.display = "block";
+    } else {
+      document.querySelector('.suggestedResult').style.display = "none";
+    }
   } catch (error) {
-    alert('Something Wrong')
+    console.error('Error searching products:', error);
   }
+});
+
+document.getElementById('close-search').addEventListener('click', () => {
+  document.getElementById('suggestedResult').style.display="none"
+  
 })
+window.addEventListener('click', () => {
+  
+});

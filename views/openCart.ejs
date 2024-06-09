@@ -17,7 +17,7 @@
 </head>
 
 <body class="bg-gray-100 md:flex ">
-  <div class="flex gap-5 overflow-x-auto max-w-1/2 md:max-h-screen w-full flex-1 p-4">
+  <div class="flex gap-5 overflow-x-auto max-w-1/2 md:max-h-screen w-full flex-1 p-4 ">
     <% product.images.forEach(image=> { %>
       <img src="/<%= image %>" alt="<%= product.productName %>" class="productImg w-full h-full"
         style="object-position: top;" productId="<%= product._id %>">
@@ -50,7 +50,7 @@
           To Cart</button>
         <div>
           <form class="pay-form">
-            <input type="hidden" value="POMPOM A-Z Store Online" name="name">
+            <input type="hidden" value="E-STORE Online" name="name">
             <input type="hidden" value="<%= originalPrice %>" name="amount" id="totals">
             <input type="hidden" value="done" name="description">
             <input type="submit" value="Pay Now"
