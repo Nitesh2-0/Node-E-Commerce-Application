@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seller Dashboard | <%= name %>
   </title>
-  <link rel="stylesheet" href="/public/stylesheets/style.css">
   <link rel="shortcut icon" href="/images/assets/E-store (1).png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
@@ -29,7 +28,6 @@
           <li>Home</li>
         </a>
         <li onclick="openForm()">Create-Product</li>
-        <li onclick="openStatusSection()">Order-Status</li>
       </ul>
       <div class="flex items-center">
         <img src="<%= seller.profileImg %>" alt="Profile Image"
@@ -64,7 +62,6 @@
           <li>Home</li>
         </a>
         <li onclick="openForm()">Create-Product</li>
-        <li onclick="openStatusSection()">Order-Status</li>
       </ul>
     </div>
     <a href="/logout" class="px-10 py-2 rounded bg-red-700 flex text-gray-100 justify-center mt-16">Logout</a>
@@ -153,7 +150,7 @@
         <% products.forEach(product=> { %>
           <div
             class="max-w-[24rem] md:w-96 max-h-[33rem] shadow-md ease-in-out delay-150 bg-white hover:-translate-y-1 hover:scale-110 hover:bg-gray-100 duration-300 border border-gray-200 rounded-lg overflow-hidden">
-            <a href="/feed/cart/<%= product._id %>">
+            <a href="/feed/cart/<%= product._id %>" target="_blank">
               <div class="flex overflow-x-auto w-full h-80 max-w-full" id="scroller-x">
                 <% product.images.forEach(image=> { %>
                   <img src="/<%= image %>" alt="<%= product.productName %>" class="object-cover w-full h-full"
@@ -208,7 +205,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="/javascripts/scrept.js"></script>
   <script>
 
     function cancelForm() {
@@ -227,10 +223,6 @@
       form.classList.toggle("hidden");
     }
 
-    function openStatusSection() {
-      var form = document.getElementById("status");
-      form.classList.toggle("hidden");
-    }
 
     const deleteProduct = document.querySelectorAll('#deleteProduct')
     deleteProduct.forEach((product) => {

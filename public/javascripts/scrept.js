@@ -8,7 +8,7 @@ const addOption = document.getElementById('addOption');
 let isProfileVisible = false;
 
 profileBtn.addEventListener('click', toggleProfileDropdown);
-logoutBtn.addEventListener("click", () => console.log("Logged out"));
+// logoutBtn.addEventListener("click", () => console.log("Logged out"));
 
 function toggleProfileDropdown(event) {
   isProfileVisible = !isProfileVisible;
@@ -238,7 +238,7 @@ document.getElementById('formSubmission').addEventListener('submit', async funct
                   <h3 class="text-xl font-semibold">${item. productName}</h3>
                   <p class="mt-2">${item. descpt}</p>
                   <div class="flex items-center gap-5">
-                    <h3 class="mt-2 text-lg font-semibold ">Price : ₹ ${Math.round(item.productPrice - (item.productPrice*item.offer/100))} &nbsp;<span class="line-through text-red-500">₹ ${item. productPrice}
+                    <h3 class="mt-2 text-lg font-semibold ">Price : ₹ ${Math.round(item.productPrice - (item.productPrice*item.offer/100))} &nbsp;<span class="line-through text-red-500">₹${item. productPrice}
                       </span> </h3>
                     <h3 class="text-yellow-300 font-semibold mt-2">(${item.offer}% Off)</h3>
                   </div>
@@ -261,8 +261,8 @@ document.getElementById('formSubmission').addEventListener('submit', async funct
 
 document.getElementById('close-search').addEventListener('click', () => {
   document.getElementById('suggestedResult').style.display="none"
-  
 })
-window.addEventListener('click', () => {
-  
-});
+
+// document.getElementById('close-cart').addEventListener('click', () => {
+//   document.getElementById('Selected-Item').style.display="none"
+// })

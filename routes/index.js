@@ -261,7 +261,6 @@ router.get('/feed/search', async (req, res) => {
     const searchData = await productModel.find({
       $or: [
         {  productName: regex },
-        {  descpt: regex }
       ]
     });
     res.json(searchData);

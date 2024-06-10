@@ -44,20 +44,22 @@
         </div>
 
         <!-- Search Input -->
-        <div class="hidden md:flex bg-slate-700 rounded-lg text-white items-center overflow-hidden w-1/2">
-          <p class="search-selectv rounded-l w-8 text-white px-2 py-2 rounded-l bg-slate-700 focus:outline-none">All</p>
+        <div class="bg-slate-700 rounded-lg text-white flex items-center overflow-hidden w-40 md:w-1/2">
+          <p class="hidden md:block rounded-l w-12 text-center text-white px-2 py-2 bg-slate-700 focus:outline-none">All
+          </p>
           <form class="w-full flex items-center" id="formSubmission">
             <input type="text" value="" placeholder="Search Products"
-              class="px-3 w-[100%] py-2 w-64 bg-slate-700 text-white rounded-r focus:outline-none placeholder-gray-400"
+              class="px-3 py-2 bg-slate-700 text-white focus:outline-none placeholder-gray-400 w-full md:rounded-r-none"
               id="searchInput" required>
-            <div class="p-2 bg-gray-600 h-full rounded-r flex items-center">
-              <button type="submit"><i class="ri-search-line cursor-pointer" id="serach"></i></button>
-            </div>
+            <button type="submit" class="p-2 md:bg-gray-600 rounded-r flex items-center">
+              <i class="ri-search-line cursor-pointer" id="search"></i>
+            </button>
           </form>
         </div>
 
+
         <!-- Shopping Cart -->
-        <div class="relative" id="shopingCart">
+        <div class="fixed bottom-16 right-5 md:relative md:bottom-0 md:right-0 md:block" id="shopingCart">
           <i class="ri-shopping-bag-4-fill text-white text-xl border-2 border-indigo-600 p-2 rounded-full"
             id="showAllProductOfAddToCart">
             <div class="absolute -top-2 left-1/6 transform -translate-x-1/2 flex items-center justify-center">
@@ -65,6 +67,7 @@
             </div>
           </i>
         </div>
+
 
         <!-- Profile -->
         <div class="flex items-center md:flex">
@@ -83,41 +86,36 @@
         <!-- Profile Section -->
         <div class="fixed hidden right-0 top-0 md:w-96 w-full bg-gray-900 h-screen transition-opacity duration-500"
           id="profileSection">
-          <div class="w-full h-auto">
-            <i class="ri-close-line absolute text-white left-2 top-2 cursor-pointer bg-gray-700 rounded px-2"
+          <div class="relative w-full h-auto bg-gray-700 text-gray-100 pt-12 flex flex-col justify-center items-center">
+            <i class="ri-close-line absolute text-white left-4 top-4 cursor-pointer bg-gray-700 rounded px-2 py-1 hover:bg-gray-600"
               id="profileCloser"></i>
-            <div class="w-full pb-12 h-auto bg-gray-700 text-gray-100 pt-12 flex flex-col justify-center items-center">
-              <img src="<%= userFeedData.img %>" alt="" class="h-24 w-24 rounded-full border-2 border-gray-400"
-                id="profileImag">
-            </div>
+
+            <img src="<%= userFeedData.img %>" alt="Profile Image"
+              class="h-24 w-24 mb-4 rounded-full border-2 border-gray-400 mt-4" id="profileImag">
           </div>
-          <hr>
-          <div class="w-full h-auto text-gray-100  p-4 px-4 ">
+          <hr class="border-gray-600">
+          <div class="w-full h-auto text-gray-100 p-4">
             <div class="mb-2">
               <p><strong>Full Name:</strong>
                 <%= user.fullName %>
               </p>
             </div>
-
             <div class="mb-2">
               <p><strong>Gender :</strong>
-                <%= user. sex %>
+                <%= user.sex %>
               </p>
             </div>
-
             <div class="mb-2">
               <p><strong>Email:</strong>
                 <%= user.email %>
               </p>
             </div>
-
             <div class="mb-2">
               <p><strong>Phone Number : </strong>
                 <%= user.CountryCode %>
-                  <%= user. phone %>
+                  <%= user.phone %>
               </p>
             </div>
-
             <div class="mb-2">
               <p><strong>Address:</strong>
                 <%= user.Locality %>
@@ -127,22 +125,22 @@
               </p>
             </div>
           </div>
-          <hr>
-          <div class="m-2 absolute w-full bottom-0  gap-2">
-            <a href="/logout"><button class="text-gray-100 bg-red-600 p-1 px-2 rounded-md"
-                id="logout-btn">Logout</button></a>
-            <a href="/feed/user/<%= user._id %>"><button class="text-gray-100 bg-green-600 p-1 px-2 rounded-md"
-                id="logout-btn">Update Profile</button></a>
-            <a href="/sellerProfile"><button class="text-gray-100 bg-yellow-600 p-1 px-2 rounded-md"
-                id="logout-btn">Sell Product</button></a>
+          <hr class="border-gray-600">
+          <div class="flex flex-col gap-2 m-4">
+            <a href="/logout" class="text-center">
+              <button class="w-full text-gray-100 bg-red-600 p-2 rounded-md hover:bg-red-500"
+                id="logout-btn">Logout</button>
+            </a>
+            <a href="/feed/user/<%= user._id %>" class="text-center">
+              <button class="w-full text-gray-100 bg-green-600 p-2 rounded-md hover:bg-green-500"
+                id="update-profile-btn">Update Profile</button>
+            </a>
+            <a href="/sellerProfile" target="_blank" class="text-center">
+              <button class="w-full text-gray-100 bg-yellow-600 p-2 rounded-md hover:bg-yellow-500"
+                id="sell-product-btn">Sell Product</button>
+            </a>
           </div>
         </div>
-
-        <!-- Mobile Menu bar -->
-        <div class="hidden flex gap-10 relative" id="menue">
-          <i class="ri-menu-3-line text-white text-5xl"></i>
-        </div>
-
       </div>
     </div>
   </nav>
@@ -214,8 +212,11 @@
   </div>
 
   <div
-    class="fixed top-[7%] md:top-[10%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[90%]">
-    <h3 class="text-xl font-semibold text-gray-200 text-center p-4 ">All Selected Collections</h3>
+    class="fixed top-[7%] md:top-[10%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[90%]" id="Selected-Item">
+    <div class="w-full flex justify-between items-center px-4 mb-4">
+      <!-- <i class="ri-close-line text-yellow-500 font-bold cursor-pointer" id="close-cart"></i> -->
+      <h3 class="text-xl font-semibold text-gray-200 text-center flex-1">All Selected Collections</h3>
+    </div>
     <div class="product-list">
     </div>
     <div class="w-full text-white bg-gray-800 p-4 mt-4">
@@ -297,12 +298,13 @@
 
   <!-- Search Item -->
   <div
-    class="w-full md:w-[90%] hidden mt-[4rem] md:mt-20  p-4 max-h-screen  md:max-h-96 bg-gray-900 fixed z-40 top-0 left-1/2 transform -translate-x-1/2 overflow-y-auto mb-12 rounded-b " id="suggestedResult">
+    class="w-full md:w-[80%] hidden mt-[4rem] md:mt-20  p-4 max-h-screen  md:max-h-96 bg-gray-900 fixed z-40 top-0 left-1/2 transform -translate-x-1/2 overflow-y-auto mb-12 rounded-b "
+    id="suggestedResult">
     <i class="ri-close-line text-yellow-500 font-bold cursor-pointer" id="close-search"></i>
     <p class="flex justify-center mb-4 text-white text-lg font-semibold">Suggested Result</p>
     <hr class="border-gray-600 mb-4">
     <div class="result-Container w-full"></div>
-    
+
   </div>
 
 
