@@ -1,4 +1,4 @@
-# E-Commerce Application
+# E-STORE ONLINE | E-Commerce Application
 
 This repository contains an E-Commerce application designed to facilitate transactions between two types of users:
 - Buyers
