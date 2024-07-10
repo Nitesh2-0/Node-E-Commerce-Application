@@ -28,11 +28,7 @@ body::-webkit-scrollbar-thumb:hover {
 .main{
   margin-top: 10vh;
 }
- /* #profileImag:hover + #profileImgEditor,
-#profileImgEditor:hover {
-    display: block;
-    color: white;
-} */
+
 
 select{
   overflow: hidden;
@@ -66,23 +62,6 @@ select{
   }
 }
 
-/* .container1, .container2{
-  display: flex;
-  justify-content: space-between;
-  padding: 1px; 
-} */
-
-/* .container1 p:nth-child(1){
-  background-color: #20602f;
-  border-radius: 5px;
-  padding: 2px 5px;
-} */
-
-/* .price{
-  background-color: #1f5d2e;
-  border-radius: 2px;
-  padding: 2px 5px;
-} */
 
 .addBtn {
   border-radius: 2px;
@@ -133,6 +112,7 @@ select{
   padding-left: 5px;
   margin-bottom: 5px;
 } 
+
 /* For small devices (full width) */
 .w-full {
   width: 100%;

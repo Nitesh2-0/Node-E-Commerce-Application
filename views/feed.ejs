@@ -19,7 +19,7 @@
   <div id="loader" class="loader"></div>
 
   <nav class="bg-gray-800 shadow-lg p-2  fixed top-0 w-full z-10 ">
-    <div class="px-6">
+    <div class="px-3">
       <div class="flex justify-between items-center p-2">
         <!-- Logo -->
         <div class="flex-shrink-0 flex items-center hidden md:block">
@@ -29,7 +29,7 @@
         </div>
 
         <div class="flex-shrink-0 flex items-center block md:hidden">
-          <h1 class="text-red-500 font-bold text-xl">E<span class="text-yellow-500">-</span>STORE</h1>
+          <a href="/feed"><h1 class="text-red-500 font-bold text-xl">E<span class="text-yellow-500">-</span>STORE</h1></a>
         </div>
 
         <!-- Delivering Updates -->
@@ -44,44 +44,38 @@
         </div>
 
         <!-- Search Input -->
-        <div class="bg-slate-700 rounded-lg text-white flex items-center overflow-hidden w-40 md:w-1/2">
-          <p class="hidden md:block rounded-l w-12 text-center text-white px-2 py-2 bg-slate-700 focus:outline-none">All
-          </p>
-          <form class="w-full flex items-center" id="formSubmission">
-            <input type="text" value="" placeholder="Search Products"
-              class="px-3 py-2 bg-slate-700 text-white focus:outline-none placeholder-gray-400 w-full md:rounded-r-none"
-              id="searchInput" required>
-            <button type="submit" class="p-2 md:bg-gray-600 rounded-r flex items-center">
-              <i class="ri-search-line cursor-pointer" id="search"></i>
-            </button>
-          </form>
+        <div class="hidden md:flex bg-slate-700 rounded-lg text-white flex items-center overflow-hidden w-40 md:w-1/2">
+          <div class="hidden md:flex bg-slate-700 rounded-lg text-white flex items-center overflow-hidden w-full">
+            <p class="md:block rounded-l w-12 text-center text-white px-2 py-2 bg-slate-700 focus:outline-none">All</p>
+            <form class="md:flex w-full flex items-center formSubmission">
+              <input type="text" placeholder="Search Products"
+                class="px-3 py-2 bg-slate-700 text-white focus:outline-none placeholder-gray-400 w-full md:rounded-r-none searchInput"
+                required>
+              <button type="submit" class="p-2 md:bg-gray-600 rounded-r flex items-center">
+                <i class="ri-search-line cursor-pointer" id="search"></i>
+              </button>
+            </form>
+          </div>
         </div>
 
 
         <!-- Shopping Cart -->
-        <div class="fixed bottom-16 right-5 md:relative md:bottom-0 md:right-0 md:block" id="shopingCart">
-          <i class="ri-shopping-bag-4-fill text-white text-xl border-2 border-indigo-600 p-2 rounded-full"
+        <div class="relative" id="shopingCart">
+          <i class="ri-shopping-bag-4-fill text-white text-xs border-2 border-indigo-600 p-2 rounded-full"
             id="showAllProductOfAddToCart">
-            <div class="absolute -top-2 left-1/6 transform -translate-x-1/2 flex items-center justify-center">
-              <p class="text-white bg-blue-800 px-2 py-1 rounded-full text-xs" id="productAvilable">0</p>
-            </div>
           </i>
-        </div>
-
-
-        <!-- Profile -->
-        <div class="flex items-center md:flex">
-          <div class="relative items-center">
-            <button id="profile-btn" class="text-white focus:outline-none flex flex-col items-center gap-1">
-              <img class="h-7 w-7 rounded-full border-2 border-gray-400" src="<%= userFeedData.img %>" alt="">
-              <div class="ml-2">
-                <p class="text-base text-xs leading-3">
-                  <%= userFeedData.name %>
-                </p>
-              </div>
-            </button>
+          <div class="absolute -top-2 left-1/6 transform -translate-x-1/2 flex items-center justify-center">
+            <p class="text-white bg-blue-700 px-2 py-1 rounded-full text-xs" id="productAvilable">0</p>
           </div>
         </div>
+
+
+        <button class="profile-btn ml-2 md:ml-0 text-white">
+          <i class="ri-account-pin-circle-fill md:text-2xl"></i>
+          <p class="text-base text-xs leading-3">
+            <%= userFeedData.name %>
+          </p>
+        </button>
 
         <!-- Profile Section -->
         <div class="fixed hidden right-0 top-0 md:w-96 w-full bg-gray-900 h-screen transition-opacity duration-500"
@@ -127,10 +121,6 @@
           </div>
           <hr class="border-gray-600">
           <div class="flex flex-col gap-2 m-4">
-            <a href="/logout" class="text-center">
-              <button class="w-full text-gray-100 bg-red-600 p-2 rounded-md hover:bg-red-500"
-                id="logout-btn">Logout</button>
-            </a>
             <a href="/feed/user/<%= user._id %>" class="text-center">
               <button class="w-full text-gray-100 bg-green-600 p-2 rounded-md hover:bg-green-500"
                 id="update-profile-btn">Update Profile</button>
@@ -139,14 +129,35 @@
               <button class="w-full text-gray-100 bg-yellow-600 p-2 rounded-md hover:bg-yellow-500"
                 id="sell-product-btn">Sell Product</button>
             </a>
+            <a href="/logout" class="text-center">
+              <button class="w-full text-gray-100 bg-red-600 p-2 rounded-md hover:bg-red-500"
+                id="logout-btn">Logout</button>
+            </a>
           </div>
         </div>
       </div>
     </div>
+    <hr class="mt-2 mb-2 bg-slate-900 md:hidden">
+    <div class=" md:hidden rounded-lg text-white flex items-center overflow-hidden w-full px-3">
+      <div class=" md:hidden rounded-lg text-white flex items-center overflow-hidden w-full">
+        <p class="md:block rounded-l w-12 text-center text-white px-2 py-2 focus:outline-none">All</p>
+        <form class="md:flex w-full flex items-center formSubmission">
+          <input type="text" placeholder="Search Products"
+            class="px-3 py-2 bg-transparent text-white outline-none placeholder-gray-400 w-full md:rounded-r-none searchInput"
+            required>
+          <button type="submit" class="p-2 md:bg-gray-600 rounded-r flex items-center">
+            <i class="ri-search-line cursor-pointer" id="search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
   </nav>
 
+  <!-- </div> -->
+
   <div class="w-full h-auto ">
-    <div class="mostFrequent w-full mt-20 bg-gray-800 flex flex-grow-0 gap-10 items-center p-3 px-7 shadow-slate-700">
+    <div
+      class="mostFrequent w-full mt-16 md:mt-20 bg-gray-800 flex flex-grow-0 gap-10 items-center p-3 px-7 shadow-slate-700">
       <% allProducts.forEach(product=> { %>
         <a href="#" class="optionTag decoration-0 bg-gray-700 px-2 py-1 rounded" id=${idx}>
           <p class="text-white font-awesome text-xs font-semibold">
@@ -212,7 +223,8 @@
   </div>
 
   <div
-    class="fixed top-[7%] md:top-[10%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[90%]" id="Selected-Item">
+    class="fixed top-[7%] md:top-[10%] avilableProductRaper pt-5 p-1 bg-gray-600 overflow-y-auto max-h-[93%] md:max-h-[90%]"
+    id="Selected-Item">
     <div class="w-full flex justify-between items-center px-4 mb-4">
       <!-- <i class="ri-close-line text-yellow-500 font-bold cursor-pointer" id="close-cart"></i> -->
       <h3 class="text-xl font-semibold text-gray-200 text-center flex-1">All Selected Collections</h3>
@@ -296,17 +308,16 @@
     </div>
   </footer>
 
+
   <!-- Search Item -->
   <div
-    class="w-full md:w-[80%] hidden mt-[4rem] md:mt-20  p-4 max-h-screen  md:max-h-96 bg-gray-900 fixed z-40 top-0 left-1/2 transform -translate-x-1/2 overflow-y-auto mb-12 rounded-b "
+    class="w-full md:w-[80%] hidden mt-[8rem] md:mt-20  p-5 max-h-screen  md:max-h-96 bg-gray-900 fixed z-40 top-0 left-1/2 transform -translate-x-1/2 overflow-y-auto mb-12 rounded-b "
     id="suggestedResult">
     <i class="ri-close-line text-yellow-500 font-bold cursor-pointer" id="close-search"></i>
     <p class="flex justify-center mb-4 text-white text-lg font-semibold">Suggested Result</p>
     <hr class="border-gray-600 mb-4">
     <div class="result-Container w-full"></div>
-
   </div>
-
 
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

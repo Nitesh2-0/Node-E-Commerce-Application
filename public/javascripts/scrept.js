@@ -1,18 +1,10 @@
-const profileBtn = document.getElementById("profile-btn");
+// const profileBtn = document.querySelectorAll(".profile-btn");
 const profileDropdown = document.getElementById("profile-dropdown");
 const logoutBtn = document.getElementById("logout-btn");
 const main = document.querySelector(".main");
 const mostFrequentSearch = document.querySelector('.mostFrequent');
 
 const addOption = document.getElementById('addOption');
-let isProfileVisible = false;
-
-profileBtn.addEventListener('click', toggleProfileDropdown);
-// logoutBtn.addEventListener("click", () => console.log("Logged out"));
-
-function toggleProfileDropdown(event) {
-  isProfileVisible = !isProfileVisible;
-}
 
 const productAvilable = document.getElementById("productAvilable");
 const shopingBag = document.getElementById('shopingCart');
@@ -180,15 +172,17 @@ window.addEventListener('load', () => {
 let flg = true;
 const account = document.getElementById('profileSection');
 
-document.getElementById('profile-btn').addEventListener('click', () => {
-  if (!flg) {
-    account.classList.remove('hidden');
-    flg = true;
-  } else {
-    account.classList.add('hidden');
-    flg = false;
-  }
-});
+document.querySelectorAll('.profile-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    if (!flg) {
+      account.classList.remove('hidden');
+      flg = true;
+    } else {
+      account.classList.add('hidden');
+      flg = false;
+    }
+  });
+})
 
 document.getElementById('profileCloser').addEventListener('click', () => {
   account.classList.add('hidden');
@@ -210,59 +204,67 @@ document.querySelectorAll('.productImg').forEach((elm) => {
 
 let previousSearchInput = '';
 
-document.getElementById('formSubmission').addEventListener('submit', async function (event) {
-  event.preventDefault();
-  let searchInput = document.getElementById('searchInput').value.trim(); 
+document.querySelectorAll('.formSubmission').forEach(form => {
+  form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    let searchInput = form.querySelector('.searchInput').value.trim(); 
 
-  try {
-    if (searchInput !== '') {
-      if (searchInput !== previousSearchInput) {
-        previousSearchInput = searchInput;
+    try {
+      if (searchInput !== '') {
+        if (searchInput !== previousSearchInput) {
+          previousSearchInput = searchInput;
 
-        const { data } = await axios.get('/feed/search', {
-          params: {
-            pattern: searchInput,
-            ignoreCase: true
-          }
-        });
+          const { data } = await axios.get('/feed/search', {
+            params: {
+              pattern: searchInput,
+              ignoreCase: true
+            }
+          });
 
-        if (data.length === 0) {
-          document.querySelector('.result-Container').innerHTML = "<h1 class='text-red-500 font-bold flex item-center'>No Such Result Found!</h1>";
-        } else {
-          document.querySelector('.result-Container').innerHTML = "";
-          data.forEach(item => {
-            const searchItem = `<a href="/feed/cart/${item._id}" target="_blanck">
-              <div class="w-full flex items-center mb-4">
-                <img src="${item.images[0]}" class="w-20 h-auto mb-2 mt-2" alt="">
-                <div class="ml-4 text-white">
-                  <h3 class="text-xl font-semibold">${item. productName}</h3>
-                  <p class="mt-2">${item. descpt}</p>
-                  <div class="flex items-center gap-5">
-                    <h3 class="mt-2 text-lg font-semibold ">Price : ₹ ${Math.round(item.productPrice - (item.productPrice*item.offer/100))} &nbsp;<span class="line-through text-red-500">₹${item. productPrice}
-                      </span> </h3>
-                    <h3 class="text-yellow-300 font-semibold mt-2">(${item.offer}% Off)</h3>
+          if (data.length === 0) {
+            document.querySelector('.result-Container').innerHTML = "<h1 class='text-red-500 font-bold flex item-center'>No Such Result Found!</h1>";
+          } else {
+            document.querySelector('.result-Container').innerHTML = "";
+            data.forEach(item => {
+              const searchItem = `<a href="/feed/cart/${item._id}" target="_blanck">
+                <div class="w-full flex items-center mb-4">
+                  <img src="${item.images[0]}" class="w-20 h-auto mb-2 mt-2" alt="">
+                  <div class="ml-4 text-white">
+                    <h3 class="text-xl font-semibold">${item. productName}</h3>
+                    <p class="mt-2">${item. descpt}</p>
+                    <div class="flex items-center gap-5">
+                      <h3 class="mt-2 text-lg font-semibold ">Price : ₹ ${Math.round(item.productPrice - (item.productPrice*item.offer/100))} &nbsp;<span class="line-through text-red-500">₹${item. productPrice}
+                        </span> </h3>
+                      <h3 class="text-yellow-300 font-semibold mt-2">(${item.offer}% Off)</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </a>
-            <hr class="border-gray-600">`;
-            document.querySelector('.result-Container').innerHTML += searchItem;
-          });
+              </a>
+              <hr class="border-gray-600">`;
+              document.querySelector('.result-Container').innerHTML += searchItem;
+            });
+          }
         }
+        document.getElementById('suggestedResult').style.display = "block";
+      } else {
+        document.querySelector('.suggestedResult').style.display = "none";
       }
-      document.getElementById('suggestedResult').style.display = "block";
-    } else {
-      document.querySelector('.suggestedResult').style.display = "none";
+    } catch (error) {
+      console.error('Error searching products:', error);
     }
-  } catch (error) {
-    console.error('Error searching products:', error);
-  }
-});
+  })
 
-document.getElementById('close-search').addEventListener('click', () => {
-  document.getElementById('suggestedResult').style.display="none"
-})
+  });
 
-// document.getElementById('close-cart').addEventListener('click', () => {
-//   document.getElementById('Selected-Item').style.display="none"
-// })
+
+  document.getElementById('close-search').addEventListener('click', () => {
+    document.getElementById('suggestedResult').style.display = "none"
+  })
+
+  // document.getElementById('searchIcon-small').addEventListener('click', function () {
+  //   document.getElementById('searchSection').classList.remove('hidden');
+  // });
+
+  // document.getElementById('closeSearchSection').addEventListener('click', function () {
+  //   document.getElementById('searchSection').classList.add('hidden');
+  // });
