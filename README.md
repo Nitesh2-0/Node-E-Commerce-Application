@@ -4,6 +4,12 @@ This repository contains an E-Commerce application designed to facilitate transa
 - Buyers
 - Sellers
 
+### Instruction To Login
+-  <a href="https://e-store-online.onrender.com/" target="_blank">Website LIVE</a>
+-  Login For
+-  <p>Email : example123@gmail.com</p>
+-  Password : 123
+
 ## Technology Stack
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
